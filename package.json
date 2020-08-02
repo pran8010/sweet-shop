@@ -1,0 +1,37 @@
+{
+  "name": "sweet-shop",
+  "version": "1.0.0",
+  "description": "E-commerce WebDev Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pran8010/sweet-shop.git"
+  },
+  "keywords": [
+    "sweet-shop",
+    "e-commerce",
+    "node",
+    "express",
+    "react"
+  ],
+  "author": "SRIPRANAV MUKTEVI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pran8010/sweet-shop/issues"
+  },
+  "homepage": "https://github.com/pran8010/sweet-shop#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
