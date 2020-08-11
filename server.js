@@ -18,7 +18,7 @@ app.get('/test1',(req, res)=>{
 })
 
 mongo.connect(process.env.DATABASE,{ useUnifiedTopology: true }, (err, client) => {
-    var db = client.db
+    var db = client.db('sweet-shop')
     if(err) {
         console.log('Database error: ' + err);
     } else {

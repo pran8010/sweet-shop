@@ -31,13 +31,16 @@ app.get('/api/checkAuth', (req, res)=>{
 
   app.route('/api/register')
     .post((req, res, next) => {
+        console.log(req.body)
         var hash = bcrypt.hashSync(req.body.password, 8);
         db.collection('users').findOne({ email: req.body.email }, function (err, user) {
             if(err) {
                 next(err);
             } else if (user) {
+                console.log('repeat')
                 res.send('user already registered')
-                res.redirect('/');
+                // res.redirect('/home');
+                return;
             } else {
                 db.collection('users').insertOne(
                   {email: req.body.email,
