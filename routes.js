@@ -19,10 +19,32 @@ app.get('/api/checkAuth', (req, res)=>{
   }
 })
 
-  app.route('/api/login')
-    .post(passport.authenticate('local', { failureRedirect: '/login' }),(req,res) => {
-         res.redirect('/');
-    });
+  // app.route('/api/login')
+  //   .post(
+  //     passport.authenticate('local', { failureRedirect: 'http://localhost:3000/login' }),(req,res) => {
+  //         // console.log('req')
+  //        res.send('success');
+  //   });
+
+  app.post('/api/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      console.log(user)//
+      if (err) { return next(err); }
+      if (!user) { return res.send('noUser') }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.send('success');
+      });
+    })(req, res, next);
+  });
+
+  // app.post('/api/login', function(req, res, next) {
+  //   passport.authenticate('local', function(err, user, info) {
+  //     console.log(err)
+  //     console.log(user)
+  //     console.log(info)
+  //   })(req, res, next);
+  // });
 
 //   app.route('/profile')
 //     .get(ensureAuthenticated, (req, res) => {
@@ -47,24 +69,24 @@ app.get('/api/checkAuth', (req, res)=>{
                    password: hash},
                   (err, doc) => {
                       if(err) {
-                          res.redirect('/');
+                          res.redirect('/home');
                       } else {
-                          next(null, user);
+                          next(null, req.body);
                       }
                   }
                 )
             }
         })},
-      passport.authenticate('local', { failureRedirect: '/' }),
+      passport.authenticate('local', { failureRedirect: '/test1' }),
       (req, res, next) => {
-          res.redirect('/');
+          // res.redirect('/home');
       }
   );
 
   app.route('/api/logout')
     .get((req, res) => {
         req.logout();
-        res.redirect('/');
+        res.redirect('/home');
     });
 
   app.use((req, res, next) => {

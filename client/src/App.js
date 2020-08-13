@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
 import Home from './Components/home'
+import { Catalogue } from "./Components/Catalogue";
 import Footer from './Components/footer';
 // import logo from './logo.svg';
 import './App.css';
@@ -23,6 +24,7 @@ class App extends React.Component{
           <Route path ='/' exact component={Home} />
           <Route path ='/home' component={Home} />
           <Route path='/login' component={Login} />
+          <Route path='/catalogue' component={Catalogue} />
           <Footer />
         </div>
       </Router>

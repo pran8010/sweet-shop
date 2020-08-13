@@ -1,8 +1,9 @@
 const session     = require('express-session');
 const passport    = require('passport');
 const ObjectID    = require('mongodb').ObjectID;
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 const bcrypt      = require('bcrypt');
+const cookieParser = require('cookie-parser')
 
 module.exports = function (app,db) {
   
@@ -15,6 +16,7 @@ module.exports = function (app,db) {
   app.use(passport.session());
   
   passport.serializeUser((user, done) => {
+    console.log(user)
     done(null, user._id);
   });
 
@@ -27,8 +29,11 @@ module.exports = function (app,db) {
       );
   });
 
-  passport.use(new LocalStrategy(
+  passport.use(new LocalStrategy({
+    usernameField: 'email'
+  },
     function(email, password, done) {
+      console.log('try')
       db.collection('users').findOne({ email: email }, function (err, user) {
         console.log('User '+ email +' attempted to log in.');
         if (err) { return done(err); }
