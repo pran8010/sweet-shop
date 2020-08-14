@@ -86,7 +86,8 @@ app.get('/api/checkAuth', (req, res)=>{
   app.route('/api/logout')
     .get((req, res) => {
         req.logout();
-        res.redirect('/home');
+        console.log('logged out')
+        res.send('out');
     });
 
   app.use((req, res, next) => {
