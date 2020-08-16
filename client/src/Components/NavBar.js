@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './css/NavBar.css'
-import Axios from 'axios'
+// import Axios from 'axios'
 
 function NavBar(){
     // const handleChange = (e)=>{

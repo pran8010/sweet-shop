@@ -1,5 +1,6 @@
 const passport    = require('passport');
 const bcrypt      = require('bcrypt');
+const fileUpload = require('express-fileupload');
 
 module.exports = function (app, db) {
       
@@ -89,6 +90,86 @@ app.get('/api/checkAuth', (req, res)=>{
         console.log('logged out')
         res.send('out');
     });
+
+
+  // -------------------------- ADMIN acesss Only --------------------------
+
+  app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/img/'
+  }));
+
+  app.post('/admin/api/addItems', (req, res) => {
+    if (req.files === null) return res.send('no file')
+    const img = req.files.image
+    img.mv(`${__dirname}/client/uploads/${req.body.name}.jpg`, (err)=>{
+      if(err) return res.send('serverERR')
+    })
+
+    let sweet = req.body
+    console.log(sweet)
+
+    db.collection('sweets').findOne({ name: sweet.name, branch: sweet.branch }, function (err, doc) {
+        if(err) {
+            next(err);
+        } else if (doc) {
+            console.log('repeat')
+            res.send('Sweet already available try updating')
+            // res.redirect('/home');
+            return;
+        } else {
+          sweet.quantity = parseFloat(sweet.quantity)
+          db.collection('sweets').insertOne(
+            sweet,
+            (err, doc) => {
+                if(err) {
+                    res.send('error');
+                } else {
+                    res.send('success');
+                }
+            }
+          )
+      }
+    })
+  })
+
+  app.post('/admin/api/updateItems', (req, res) => {
+    if (req.files !== null) {
+      const img = req.files.image
+      img.mv(`${__dirname}/client/uploads/${req.body.name}.jpg`, (err)=>{
+        if(err) return res.send('serverERR')
+      })
+    }
+
+    let sweet = req.body
+    console.log(sweet)
+
+    db.collection('sweets').findOne({ name: sweet.name, branch: sweet.branch }, function (err, doc) {
+        if(err) {
+            next(err);
+        } else if (!doc) {
+            console.log('repeat')
+            res.send('Sweet does not exist try unchecking update option')
+            // res.redirect('/home');
+            return;
+        } else {
+          var quantity = parseFloat(sweet.quantity)
+          delete sweet.quantity
+          db.collection('sweets').findOneAndUpdate({ name: sweet.name, branch: sweet.branch },
+            {
+              $inc: { quantity: quantity},
+              $set: {... sweet}
+            },
+            { new: true },(err, doc)=>{
+            if(err) {
+              res.send('Error')
+              console.log(err)
+            }
+            else res.send('Update success')
+          })
+        }
+    })
+  })
 
   app.use((req, res, next) => {
     res.status(404)
