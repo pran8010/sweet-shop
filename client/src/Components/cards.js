@@ -47,7 +47,7 @@ class Cards extends React.Component {
                         message: res.data
                     })
                 }
-                else if (res.data=='Success') {
+                else if (res.data==='Success') {
                     // e.target.value = 'In Cart'
                     this.setState({
                         message: 'Added to Cart successfully',
@@ -87,7 +87,7 @@ class Cards extends React.Component {
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
                             </select>
-                            <span className="input-group-text">₹</span>
+                            <span className="input-group-text">kg</span>
                         </div>
                     </li>
                     <li className="list-group-item">

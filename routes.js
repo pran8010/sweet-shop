@@ -1,6 +1,7 @@
 const passport    = require('passport');
 const bcrypt      = require('bcrypt');
 const fileUpload = require('express-fileupload');
+const ObjectID = require('mongodb').ObjectID
 
 module.exports = function (app, db) {
       
@@ -204,6 +205,27 @@ app.get('/api/checkAuth', (req, res)=>{
       }
     } )
 
+  })
+
+  app.get('/api/users/cart', ensureAuthenticated, (req, res, next)=>{
+    var user = req.user
+    db.collection('users').findOne(user,(err,doc)=>{
+      if (err) return res.send('Error')
+      else{
+        console.log(doc.cart)
+        return res.json(doc.cart)
+      }
+    })
+  })
+
+  app.get('/api/getSweet/:ID', (req, res)=>{
+    var ID =  new ObjectID(req.params.ID)
+    db.collection('sweets').findOne({_id: ID}, (err, doc)=>{
+      if(err) return res.send('Error')
+      else{
+        return res.json(doc)
+      }
+    })
   })
 
 // ------------------- listening port ---------------------

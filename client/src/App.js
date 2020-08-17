@@ -76,7 +76,7 @@ class App extends React.Component{
       url: '/api/checkAuth',
       // headers: {"Access-Control-Allow-Origin": "*"}
     }).then((res)=>{
-      if (res.data === 'yes') this.handleLoggedIn()
+      if (res.data === 'yes') this.handleLoggedIn();
       else {
         this.setState({
           message: 'Please login to use Carts, wishlist etc.. features'
