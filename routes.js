@@ -102,7 +102,7 @@ app.get('/api/checkAuth', (req, res)=>{
   app.post('/admin/api/addItems', (req, res) => {
     if (req.files === null) return res.send('no file')
     const img = req.files.image
-    img.mv(`${__dirname}/client/uploads/${req.body.name}.jpg`, (err)=>{
+    img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
       if(err) return res.send('serverERR')
     })
 
@@ -136,7 +136,7 @@ app.get('/api/checkAuth', (req, res)=>{
   app.post('/admin/api/updateItems', (req, res) => {
     if (req.files !== null) {
       const img = req.files.image
-      img.mv(`${__dirname}/client/uploads/${req.body.name}.jpg`, (err)=>{
+      img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
         if(err) return res.send('serverERR')
       })
     }
@@ -170,6 +170,18 @@ app.get('/api/checkAuth', (req, res)=>{
         }
     })
   })
+
+
+  // --------------- catalogue mangement ------------------
+
+  app.get('/api/catalogue', (req,res)=>{
+    db.collection('sweets').find().toArray().then((docs)=>{
+      console.log(docs)
+      res.json(docs)
+    })
+  })
+
+// ------------------- listening port ---------------------
 
   app.use((req, res, next) => {
     res.status(404)

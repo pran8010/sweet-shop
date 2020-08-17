@@ -6,9 +6,11 @@ import axios from 'axios'
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
 import Home from './Components/home'
-import { Catalogue } from "./Components/Catalogue";
+import Catalogue from "./Components/Catalogue";
 import AddItems  from "./Components/addItem";
 import Footer from './Components/footer';
+import Message from './Components/customAlert'
+
 // import logo from './logo.svg';
 import './App.css';
 
@@ -16,7 +18,7 @@ class App extends React.Component{
   constructor() {
     super()
     this.state = {
-      tes: ''
+      message: ''
     }
     this.handleLoggedIn = this.handleLoggedIn.bind(this);
     // this.logCheck = this.logCheck(this)
@@ -44,6 +46,9 @@ class App extends React.Component{
       </select>,
       document.getElementById('logger')
     )
+    this.setState({
+      message: 'You are Logged in...'
+    })
   }
 
     handleChange = (e)=>{
@@ -65,15 +70,21 @@ class App extends React.Component{
       // headers: {"Access-Control-Allow-Origin": "*"}
     }).then((res)=>{
       if (res.data === 'yes') this.handleLoggedIn()
-      else return false
+      else {
+        this.setState({
+          message: 'Please login to use Carts, wishlist etc.. features'
+        })
+      }
     })
   }
 
   render() {
+    let { message } = this.state
     return (
       <Router>
         <div className="App">
           <NavBar />
+          {message ? <Message msg={message} /> : null}
           <Route path ='/' exact component={Home} />
           <Route path ='/home' component={Home} />
           <Route path='/login' component={Login} />
