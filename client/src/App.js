@@ -9,7 +9,8 @@ import Home from './Components/home'
 import Catalogue from "./Components/Catalogue";
 import AddItems  from "./Components/addItem";
 import Footer from './Components/footer';
-import Message from './Components/customAlert'
+import Message from './Components/customAlert';
+import Cart from './Components/carts'
 
 // import logo from './logo.svg';
 import './App.css';
@@ -18,7 +19,8 @@ class App extends React.Component{
   constructor() {
     super()
     this.state = {
-      message: ''
+      message: '',
+      logStatus: false
     }
     this.handleLoggedIn = this.handleLoggedIn.bind(this);
     // this.logCheck = this.logCheck(this)
@@ -39,7 +41,8 @@ class App extends React.Component{
     handleLoggedIn = ()=> {
     ReactDOM.render(
       <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
-        <option selected>Account</option>
+        <option disabled selected>Account</option>
+        <option value = 'cart'>Cart 🛒</option>
         <option value="1">Your Orders</option>
         <option value="2">Account</option>
         <option value="3">Sign Out</option>
@@ -47,7 +50,8 @@ class App extends React.Component{
       document.getElementById('logger')
     )
     this.setState({
-      message: 'You are Logged in...'
+      message: 'You are Logged in...',
+      logStatus: true
     })
   }
 
@@ -60,6 +64,9 @@ class App extends React.Component{
           }).then((res)=>{
             if (res.data==='out') window.location.replace('/home')
           })
+      }
+      else if (x === 'cart'){
+          window.location.replace('/users/cart')
       }
   }
 
@@ -79,7 +86,7 @@ class App extends React.Component{
   }
 
   render() {
-    let { message } = this.state
+    let { message, logStatus } = this.state
     return (
       <Router>
         <div className="App">
@@ -87,9 +94,10 @@ class App extends React.Component{
           {message ? <Message msg={message} /> : null}
           <Route path ='/' exact component={Home} />
           <Route path ='/home' component={Home} />
-          <Route path='/login' component={Login} />
+          { !logStatus ? <Route path='/login' component={Login} /> : null }
           <Route path='/catalogue' component={Catalogue} />
           <Route path='/admin/addItem' component={AddItems} />
+          { logStatus ? <Route path='/users/cart' component={Cart} /> : null }
           <Footer />
         </div>
       </Router>

@@ -4,12 +4,12 @@ const fileUpload = require('express-fileupload');
 
 module.exports = function (app, db) {
       
-//   function ensureAuthenticated(req, res, next) {
-//     if (req.isAuthenticated()) {
-//         return next();
-//     }
-//     res.redirect('/');
-//   };
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.send('Not Logged In')
+  };
 
 app.get('/api/checkAuth', (req, res)=>{
   if (req.isAuthenticated()){
@@ -66,8 +66,12 @@ app.get('/api/checkAuth', (req, res)=>{
                 return;
             } else {
                 db.collection('users').insertOne(
-                  {email: req.body.email,
-                   password: hash},
+                  {
+                    email: req.body.email,
+                    password: hash,
+                    cart: [],
+                    orders:[]
+                  },
                   (err, doc) => {
                       if(err) {
                           res.redirect('/home');
@@ -179,6 +183,27 @@ app.get('/api/checkAuth', (req, res)=>{
       console.log(docs)
       res.json(docs)
     })
+  })
+
+  app.post('/api/user/addCart', ensureAuthenticated, (req, res)=>{
+    var user = req.user
+    var obj = req.body
+    // console.log(req.user)
+    console.log(obj)
+    db.collection('users').findOneAndUpdate(user,{
+      $push: { cart: obj }
+    },
+    { new: true }, (err, doc)=>{
+      if(err) {
+        res.send('Error')
+        console.log(err)
+      }
+      else{
+        res.send('Success')
+        console.log(doc)
+      }
+    } )
+
   })
 
 // ------------------- listening port ---------------------
