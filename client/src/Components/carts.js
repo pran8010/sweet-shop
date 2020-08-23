@@ -1,7 +1,8 @@
 import React from "react";
 import Axios from "axios";
 import Message from './customAlert';
-import CartsCard from './cartsCard'
+import CartsCard from './cartsCard';
+import CheckOut from "./checkOut";
 
 
 class Cart extends React.Component{
@@ -56,7 +57,7 @@ class Cart extends React.Component{
     }
 
     render(){
-        let { message,total } = this.state
+        let { message,total,cart } = this.state
         return(
             <div>
                 <h1>Your Cart</h1>
@@ -66,11 +67,15 @@ class Cart extends React.Component{
                         {this.cardGen()}
                     </div>
                     <div className='col-md-4 p-2 bg-light'>
-                        <button className='btn btn-success w-100 mb-3'>Proceed to Checkout</button>
+                        <button className='btn btn-success w-100 mb-3' data-toggle="modal" data-target="#checkOut" >Proceed to Checkout</button>
                         <hr></hr>
                         <div>
                             <span><strong>TOTAL AMT: </strong>₹{total}</span>
                         </div>
+                        <div class="modal fade" id="checkOut" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <CheckOut cart={cart} total={total} />
+                        </div>
+
                     </div>
                 </div>
             </div>

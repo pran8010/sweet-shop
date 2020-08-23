@@ -7,7 +7,7 @@ function Footer(){
                 <div className='col-sm-7'>
 
                 </div>
-                <div className='col-sm-5'>
+                <div className='col-sm-5 p-4'>
                     Created By: PRAN
                     <br></br>
                     github <br></br>

@@ -228,6 +228,35 @@ app.get('/api/checkAuth', (req, res)=>{
     })
   })
 
+  // ------------------- cart mgmt ----------------------
+
+  app.post('/api/users/address', ensureAuthenticated, (req, res)=>{
+    var address = req.body
+    var user = req.user
+    db.collection('users').findOneAndUpdate(user,{
+      $set: {address}
+    },
+    { new: true }, (err, doc)=>{
+      if(err) {
+        res.send('Error')
+        console.log(err)
+      }
+      else{
+        res.send('Success')
+        console.log(doc)
+      }
+    })
+  })
+
+  app.get('/api/users/address', ensureAuthenticated, (req, res)=>{
+    var user = req.user
+    db.collection('users').findOne(user, (err, doc)=>{
+      if(err) return res.send('Error')
+      else if (!doc.address) return res.send('no address')
+      else return res.json(doc.address)
+    })
+  })
+
 // ------------------- listening port ---------------------
 
   app.use((req, res, next) => {

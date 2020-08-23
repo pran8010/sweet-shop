@@ -11,6 +11,7 @@ import AddItems  from "./Components/addItem";
 import Footer from './Components/footer';
 import Message from './Components/customAlert';
 import Cart from './Components/carts'
+import Uorders from './Components/orders'
 
 // import logo from './logo.svg';
 import './App.css';
@@ -20,7 +21,8 @@ class App extends React.Component{
     super()
     this.state = {
       message: '',
-      logStatus: false
+      logStatus: false,
+      page: '/home'
     }
     this.handleLoggedIn = this.handleLoggedIn.bind(this);
     // this.logCheck = this.logCheck(this)
@@ -42,9 +44,9 @@ class App extends React.Component{
     ReactDOM.render(
       <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
         <option disabled selected>Account</option>
-        <option value = 'cart'>Cart 🛒</option>
-        <option value="1">Your Orders</option>
-        <option value="2">Account</option>
+        <option value = '/users/cart'>Cart 🛒</option>
+        <option value="/users/Uorders">Your Orders</option>
+        <option value="/users/account">Account</option>
         <option value="3">Sign Out</option>
       </select>,
       document.getElementById('logger')
@@ -65,9 +67,10 @@ class App extends React.Component{
             if (res.data==='out') window.location.replace('/home')
           })
       }
-      else if (x === 'cart'){
-          window.location.replace('/users/cart')
-      }
+      else window.location.replace(x)
+      // this.setState({
+      //   page: x
+      // })
   }
 
   componentDidMount = async()=>{
@@ -98,6 +101,7 @@ class App extends React.Component{
           <Route path='/catalogue' component={Catalogue} />
           <Route path='/admin/addItem' component={AddItems} />
           { logStatus ? <Route path='/users/cart' component={Cart} /> : null }
+          { logStatus ? <Route path='/users/Uorders' component={Uorders} /> : null }
           <Footer />
         </div>
       </Router>
