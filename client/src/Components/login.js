@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+// import {Redirect} from 'react-router-dom'
 
 class Login extends React.Component{
     constructor() {
@@ -35,6 +36,9 @@ class Login extends React.Component{
             else {
                 alert('registered successfully')
                 window.location.replace('/home')
+                // this.setState({
+                //     logStat: true
+                // })
             }
         }).catch (err => console.log(err))
         
@@ -54,14 +58,15 @@ class Login extends React.Component{
         }).then(res=>{
             if (res.data === 'success'){
                 window.location.replace('/home')
+                // this.setState({
+                //     emailLog: '',
+                //     passwordLog: '',
+                //     logStat: true
+                // })
             }
             else if (res.data === 'noUser'){
                 alert('Your Credentials are either wrong or do not exist in our database!')
             }
-            this.setState({
-                emailLog: '',
-                passwordLog: ''
-            })
         })
     }
 
@@ -73,6 +78,8 @@ class Login extends React.Component{
     }
 
     render(){
+
+        // if (this.state.logStat) return <Redirect to='/home' />
         return(
             <div className='col-sm-8 m-4 p-4 bg-light rounded-lg'>
                 <h2>LOGIN</h2>

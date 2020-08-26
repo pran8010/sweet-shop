@@ -75,16 +75,17 @@ app.get('/api/checkAuth', (req, res)=>{
                   },
                   (err, doc) => {
                       if(err) {
-                          res.redirect('/home');
+                          res.send('Error');
                       } else {
-                          next(null, req.body);
+                          next()
                       }
                   }
                 )
             }
         })},
-      passport.authenticate('local', { failureRedirect: '/test1' }),
+      passport.authenticate('local'),
       (req, res, next) => {
+        res.send('success')
           // res.redirect('/home');
       }
   );
