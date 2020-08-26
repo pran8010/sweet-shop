@@ -83,7 +83,8 @@ class AddressHandle extends React.Component{
             console.log(res.data)
             this.setState({
                 message: res.data,
-                addCheck: true
+                addCheck: true,
+                next: true
             })
         })
     }

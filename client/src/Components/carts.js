@@ -49,6 +49,10 @@ class Cart extends React.Component{
         return (list)
     }
 
+    deleteCard = (item)=>{
+        //
+    }
+
     totGen = (rate,qty)=>{
         console.log(rate,qty)
         this.setState(prevState=>({
