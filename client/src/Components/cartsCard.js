@@ -34,13 +34,30 @@ class CartsCard extends React.Component{
         })
     }
 
+    handleDel = (e)=>{
+        let { rate, cosQty, id } = this.state
+        Axios({
+            method: 'get',
+            url: `/api/users/removeCart/${id}`
+        }).then((res)=>{
+            if (res.data ==='Success'){
+                this.setState({
+                    cartingStat: true
+                })
+                this.props.totGen(`-${rate}`,cosQty)
+            }
+            else alert(res.data)
+        })
+    }
+
     render(){
         let {rate,branch,cosQty,message,storeQty,cartingStat,name} = this.state
+        if (cartingStat) return null 
         return(
             <div className="card mb-3" style={{"max-width": "540px"}}>
             <div className="row g-0">
-                <div className="col-md-4 text-center">
-            <img src={`../uploads/${name}.jpg`} className = 'text-center'style={{"max-width": "185px"}}  alt={name} />
+                <div className="col-md-4 p-2 text-center d-flex align-items-center">
+                    <img src={`../uploads/${name}.jpg`} className = 'text-center'style={{"max-width": "185px", width: "100%"}}  alt={name} />
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
@@ -63,10 +80,11 @@ class CartsCard extends React.Component{
                             </div>
                         </li>
                         <li class="list-group-item">
-                            <div className="input-group">
+                            {/* <div className="input-group">
                                 <span className="input-group-text"><strong>Branch</strong></span>
                                 <input type="text" aria-label="Branch" className="form-control bg-light" value={branch} readOnly />
-                            </div>
+                            </div> */}
+                            <button className='btn btn-outline-danger btn' onClick={this.handleDel}>DELETE</button>
                         </li>
                     </ul>
                 </div>

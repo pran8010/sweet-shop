@@ -49,8 +49,10 @@ class Cart extends React.Component{
         return (list)
     }
 
-    deleteCard = (item)=>{
-        //
+    deleteCard = (items)=>{
+        this.setState({
+            cart: items
+        })
     }
 
     totGen = (rate,qty)=>{
@@ -67,7 +69,7 @@ class Cart extends React.Component{
                 <h1>Your Cart</h1>
                 { message ? <Message msg={message} /> : null}
                 <div className = 'row p-4'>
-                    <div className='col-md-8'>
+                    <div className='col-md-8 d-flex flex-wrap'>
                         {this.cardGen()}
                     </div>
                     <div className='col-md-4 p-2 bg-light'>

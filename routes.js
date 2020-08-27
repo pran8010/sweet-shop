@@ -21,6 +21,11 @@ app.get('/api/checkAuth', (req, res)=>{
   }
 })
 
+app.get('/api/test2',(req, res)=>{
+  console.log(req.user)
+  res.json(req.user)
+})
+
   // app.route('/api/login')
   //   .post(
   //     passport.authenticate('local', { failureRedirect: 'http://localhost:3000/login' }),(req,res) => {
@@ -208,15 +213,34 @@ app.get('/api/checkAuth', (req, res)=>{
 
   })
 
-  app.get('/api/users/cart', ensureAuthenticated, (req, res, next)=>{
+  app.get('/api/users/removeCart/:ID' ,ensureAuthenticated, (req, res)=>{
     var user = req.user
-    db.collection('users').findOne(user,(err,doc)=>{
-      if (err) return res.send('Error')
+    var ID = req.params.ID
+    // console.log(ID)
+    db.collection('users').findOneAndUpdate({ email: user.email, 'cart.prod_id': ID }, {
+      $pull: { 'cart': { prod_id: ID } }
+    }, { new: true }, (err, doc)=>{
+      if (err) {
+        console.log(err)
+        return res.send(err)
+      }
       else{
         console.log(doc.cart)
-        return res.json(doc.cart)
+        res.send('Success')
       }
     })
+  })
+
+  app.get('/api/users/cart', ensureAuthenticated, (req, res, next)=>{
+    var user = req.user
+    res.json(user.cart)
+    // db.collection('users').findOne(user,(err,doc)=>{
+    //   if (err) return res.send('Error')
+    //   else{
+    //     console.log(doc.cart)
+    //     return res.json(doc.cart)
+    //   }
+    // })
   })
 
   app.get('/api/getSweet/:ID', (req, res)=>{
