@@ -3,6 +3,9 @@ E-commerce like
 
 ## <a href = 'spkm2808.github.io/Sweet-Shop' target = '_blank'>Link</a>
 
+Please change placements in /client/node_modules/react-toast-notifications/dist/toastContainer.js 
+placements.top-right.top = 50
+
 ***
 ## -------------- Steps TO be Done ------------------
 1. Basic HTML layout
