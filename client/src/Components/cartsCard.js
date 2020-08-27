@@ -51,7 +51,7 @@ class CartsCard extends React.Component{
     }
 
     render(){
-        let {rate,branch,cosQty,message,storeQty,cartingStat,name} = this.state
+        let {rate, branch, cosQty, message, storeQty, cartingStat, name} = this.state
         if (cartingStat) return null 
         return(
             <div className="card mb-3" style={{"max-width": "540px"}}>

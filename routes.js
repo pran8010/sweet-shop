@@ -253,6 +253,13 @@ app.get('/api/test2',(req, res)=>{
     })
   })
 
+  app.get('/api/users/cartCheck/:ID', ensureAuthenticated, (req, res)=>{
+    let ID = req.params.ID
+    let avail = req.user.cart.find(({ prod_id }) => prod_id === ID )
+    if (avail) return res.send('Found')
+    else return res.send('Nope')
+  })
+
   // ------------------- cart mgmt ----------------------
 
   app.post('/api/users/address', ensureAuthenticated, (req, res)=>{

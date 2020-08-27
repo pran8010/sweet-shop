@@ -19,9 +19,34 @@ class Cards extends React.Component {
         
     }
 
+    componentDidMount = ()=>{
+        if (this.props.storeQty <= 0) {
+            this.setState({
+                cartingStat: true
+            })
+        }
+        Axios({
+            method: 'get',
+            url: `/api/users/cartCheck/${this.state.prod_id}`
+        }).then((res)=>{
+            if (res.data === 'Found'){
+                this.setState({
+                    message: 'Already in Cart',
+                    cartingStat: true
+                })
+            }
+        })
+    }
+
     handleChange = (e)=>{
-        this.setState({
-            quantity: e.target.value
+        if (e.target.value>this.props.storeQty) this.setState({
+            message: 'Item Out Of Stock or Quantiy is not available',
+            cartingStat: true
+        })
+        else this.setState({
+            quantity: parseFloat(e.target.value),
+            cartingStat: false,
+            message: ''
         })
     }
 
@@ -59,9 +84,9 @@ class Cards extends React.Component {
     }
 
     render(){
-        let { message, cartingStat } = this.state
+        let { message, cartingStat, quantity } = this.state
         return(
-            <div className="card m-3" style={{width: "20.5rem"}}>
+            <div className="card m-3" style={{width: "20.5rem", borderColor: cartingStat ? "red": "green"}}>
                 { message ? <Message msg={message} /> : null}
                 <img src={`/uploads/${this.props.name}.jpg`} className="card-img-top" alt={`${this.props.name}`} />
                 <div className="card-body">
@@ -81,7 +106,7 @@ class Cards extends React.Component {
                     <li className="list-group-item">
                         <div className="input-group">
                             <label className="input-group-text" htmlFor="quantity"><strong>Quantity</strong></label>
-                            <select className="form-select" id="quantity" onChange={this.handleChange} disabled={cartingStat} >
+                            <select className="form-select" id="quantity" onChange={this.handleChange} disabled={quantity>this.props.storeQty} >
                                 <option disabled selected>Choose quantity </option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
@@ -98,7 +123,7 @@ class Cards extends React.Component {
                     </li>
                 </ul>
                 <div className="card-body">
-                    <button className="btn btn-warning" onClick={this.handleCarting} disabled={cartingStat}>Add to Cart 🛒</button>
+                    <button className="btn btn-warning" onClick={this.handleCarting} disabled={cartingStat||(quantity>this.props.storeQty)}>Add to Cart 🛒</button>
                     <button className="btn btn-primary ml-5">Wishlist</button>
                 </div>
             </div>
