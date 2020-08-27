@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ToastProvider, useToasts } from "react-toast-notifications";
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import axios from 'axios' 
@@ -92,16 +93,18 @@ class App extends React.Component{
     let { message, logStatus } = this.state
     return (
       <Router>
-        <div className="App">
+          <div className="App">
           <NavBar />
           {message ? <Message msg={message} /> : null}
-          <Route path ='/' exact component={Home} />
-          <Route path ='/home' component={Home} />
-          { !logStatus ? <Route path='/login' component={Login} /> : null }
-          <Route path='/catalogue' component={Catalogue} />
-          <Route path='/admin/addItem' component={AddItems} />
-          { logStatus ? <Route path='/users/cart' component={Cart} /> : null }
-          { logStatus ? <Route path='/users/Uorders' component={Uorders} /> : null }
+          <ToastProvider >
+            <Route path ='/' exact component={Home} />
+            <Route path ='/home' component={Home} />
+            { !logStatus ? <Route path='/login' render={()=><Login />} /> : null }
+            <Route path='/catalogue' component={Catalogue} />
+            <Route path='/admin/addItem' component={AddItems} />
+            { logStatus ? <Route path='/users/cart' component={Cart} /> : null }
+            { logStatus ? <Route path='/users/Uorders' component={Uorders} /> : null }
+          </ToastProvider>
           <Footer />
         </div>
       </Router>
