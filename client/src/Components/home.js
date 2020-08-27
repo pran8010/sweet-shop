@@ -1,6 +1,8 @@
 import React from 'react'
+import { useToasts } from "react-toast-notifications";
 
 function Home(){
+    const {addToast} = useToasts()
     return(
         [
             <h1>Home-PAGE</h1>,
@@ -29,7 +31,8 @@ function Home(){
                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     <span className="sr-only">Next</span>
                 </a>
-            </div>
+            </div>,
+            <button onClick={()=>addToast('success', {appearance: "error"})}>Check Toasts</button>
         ]
     )
 }

@@ -1,6 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 // import {Redirect} from 'react-router-dom'
+// import { useToasts } from "react-toast-notifications";
+
+
 
 class Login extends React.Component{
     constructor() {
@@ -46,7 +49,7 @@ class Login extends React.Component{
 
     handleLogSubmit = (e)=>{
         const {emailLog, passwordLog} = this.state
-
+        // const { addToast } = useToasts()
         e.preventDefault()
         axios({
             method: 'post',
@@ -57,6 +60,7 @@ class Login extends React.Component{
             }
         }).then(res=>{
             if (res.data === 'success'){
+                // addToast('Logged In Successfully', { appearance: 'success' })
                 window.location.replace('/home')
                 // this.setState({
                 //     emailLog: '',
@@ -66,6 +70,7 @@ class Login extends React.Component{
             }
             else if (res.data === 'noUser'){
                 alert('Your Credentials are either wrong or do not exist in our database!')
+                // addToast('Invalid credentials', { appearance: 'error' })
             }
         })
     }
@@ -78,7 +83,6 @@ class Login extends React.Component{
     }
 
     render(){
-
         // if (this.state.logStat) return <Redirect to='/home' />
         return(
             <div className='col-sm-8 m-4 p-4 bg-light rounded-lg'>
