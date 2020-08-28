@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ToastProvider, useToasts } from "react-toast-notifications";
 
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
 import axios from 'axios' 
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
@@ -16,6 +16,21 @@ import Uorders from './Components/orders'
 
 // import logo from './logo.svg';
 import './App.css';
+import Toast from './Components/toasts';
+import ToastEn from './Components/toastEnabler';
+
+
+
+// import { useToasts } from "react-toast-notifications"
+
+class Toaster extends React.Component{
+  componentDidMount(){
+    this.props.addToast('this.props.props.content',{ appearance: 'error', autoDismiss:true} )
+  }
+  render(){
+    return(<div>hi</div>)
+  }
+}
 
 class App extends React.Component{
   constructor() {
@@ -23,9 +38,10 @@ class App extends React.Component{
     this.state = {
       message: '',
       logStatus: false,
-      page: '/home'
+      page: ''
     }
     this.handleLoggedIn = this.handleLoggedIn.bind(this);
+    this.navTemp = this.navTemp.bind(this)
     // this.logCheck = this.logCheck(this)
   }
 
@@ -41,17 +57,28 @@ class App extends React.Component{
   //   return true
   // }
 
+
+    navTemp = ()=>{
+      if (!this.state.logStatus){
+        return (
+          <div id='logger' className='mb-2 mr-2 mb-lg-0'>
+            <Link to ='/login' ><button className='btn btn-outline-danger'>LOGIN/SIGNUP</button></Link>
+        </div>
+        )
+      }
+      else {
+        return(
+          <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
+            <option value ='' disabled selected>Account</option>
+            <option value = '/users/cart'>Cart 🛒</option>
+            <option value="/users/Uorders">Your Orders</option>
+            <option value="/users/account">Account</option>
+            <option value="3">Sign Out</option>
+          </select>
+        )
+      }
+    }
     handleLoggedIn = ()=> {
-    ReactDOM.render(
-      <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
-        <option disabled selected>Account</option>
-        <option value = '/users/cart'>Cart 🛒</option>
-        <option value="/users/Uorders">Your Orders</option>
-        <option value="/users/account">Account</option>
-        <option value="3">Sign Out</option>
-      </select>,
-      document.getElementById('logger')
-    )
     this.setState({
       message: 'You are Logged in...',
       logStatus: true
@@ -65,13 +92,21 @@ class App extends React.Component{
               method: 'get',
               url: '/api/logout',
           }).then((res)=>{
-            if (res.data==='out') window.location.replace('/home')
+            if (res.data==='out') {
+              this.setState({
+                logStatus: false,
+                message: 'Please login to use Carts, wishlist etc.. Features',
+                page: '/home'
+              })
+            }
           })
       }
-      else window.location.replace(x)
-      // this.setState({
-      //   page: x
-      // })
+      else {
+        this.setState({
+          page: x
+        })
+        e.target.value = ''
+      }
   }
 
   componentDidMount = async()=>{
@@ -90,20 +125,39 @@ class App extends React.Component{
   }
 
   render() {
-    let { message, logStatus } = this.state
+    let { message, logStatus, page } = this.state
+    const redirection = ()=>{
+      if (page){
+        let temp = page
+        this.setState({
+          page: ''
+        })
+      if (temp==='/home')return ([
+          <Toast />,
+          <Redirect to= {temp} />
+        ])
+      else return (<Redirect to={temp} />)
+      }
+    }
     return (
       <Router>
           <div className="App">
-          <NavBar />
+          { logStatus ? <NavBar logger = {this.navTemp} />: <NavBar logger = {this.navTemp} /> }
           {message ? <Message msg={message} /> : null}
           <ToastProvider >
+            {
+              redirection()
+            }
+          {/* <ToastEn>
+            {content, appearance => } */}
             <Route path ='/' exact component={Home} />
             <Route path ='/home' component={Home} />
-            { !logStatus ? <Route path='/login' render={()=><Login />} /> : null }
-            <Route path='/catalogue' component={Catalogue} />
-            <Route path='/admin/addItem' component={AddItems} />
-            { logStatus ? <Route path='/users/cart' component={Cart} /> : null }
-            { logStatus ? <Route path='/users/Uorders' component={Uorders} /> : null }
+            { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
+            <Route path='/catalogue' component={ToastEn(Catalogue)} />
+            <Route path='/admin/addItem' component={ToastEn(AddItems)} />
+            { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
+            { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
+          {/* </ToastEn> */}
           </ToastProvider>
           <Footer />
         </div>

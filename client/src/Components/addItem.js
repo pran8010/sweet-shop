@@ -28,6 +28,9 @@ class AddItems extends React.Component{
             this.setState({image: e.target.files[0]})
         }
         else if(e.target.name === 'updateOrNot'){
+            if (!this.state.updateOrNot) this.props.addToast('Update item {Name & Branch} fields required', {appearance: 'info', autoDismiss: true})
+
+            else this.props.addToast('Add a new item all fields required', {appearance: 'info', autoDismiss: true})
             this.setState(prevState => ({updateOrNot : !prevState.updateOrNot}))
         }
         else{
@@ -60,6 +63,7 @@ class AddItems extends React.Component{
                     })
                 }
             }).then((res)=>{
+                this.props.addToast('Add Item successfull', {appearance: 'success', autoDismiss: true})
                 this.setState({
                     message: res.data
                 })
@@ -76,6 +80,8 @@ class AddItems extends React.Component{
                     })
                 }
             }).then((res)=>{
+                if(res.data === 'Sweet does not exist try unchecking update option') this.props.addToast(res.data, {appearance: 'error', autoDismiss: true})
+                else this.props.addToast('Update successfull', {appearance: 'success', autoDismiss: true})
                 this.setState({
                     message: res.data
                 })

@@ -32,7 +32,7 @@ function Home(){
                     <span className="sr-only">Next</span>
                 </a>
             </div>,
-            <button onClick={()=>addToast('success', {appearance: "error"})}>Check Toasts</button>
+            <button onClick={()=>addToast('Checker', {appearance: "error"})}>Check Toasts</button>
         ]
     )
 }

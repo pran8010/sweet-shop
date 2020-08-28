@@ -29,7 +29,7 @@ class Catalogue extends React.Component{
     cardGen = ()=>{
         var list = this.state.products.map((item)=>
             <div key={item._id}>
-                <Cards name = {item.name} description = {item.description} rate = {item.rate} branch={item.branch} ID={item._id} storeQty={item.quantity} /> 
+                <Cards name = {item.name} description = {item.description} rate = {item.rate} branch={item.branch} ID={item._id} storeQty={item.quantity} addToast = {this.props.addToast} /> 
             </div>
         )
         return (list)

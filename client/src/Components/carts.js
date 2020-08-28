@@ -22,7 +22,10 @@ class Cart extends React.Component{
             method: 'get',
             url: '/api/users/cart'
         }).then((res)=>{
-            if (res.data ==='Error') return this.setState({ message: res.data })
+            if (res.data ==='Error') {
+                this.addToast('Error in loading Items', {appearance: 'error', autoDismiss: true})
+                return this.setState({ message: res.data })
+            }
             console.log(res.data)
             this.setState({
                 cart: res.data
@@ -42,7 +45,7 @@ class Cart extends React.Component{
             
             return(
                 <div key={item.prod_id}>
-                <CartsCard ID={item.prod_id} cosQty={item.quantity} totGen={this.totGen} /> 
+                <CartsCard ID={item.prod_id} cosQty={item.quantity} totGen={this.totGen} addToast={this.props.addToast} /> 
             </div>
             )
         })

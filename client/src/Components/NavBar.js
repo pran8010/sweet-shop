@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './css/NavBar.css'
 // import Axios from 'axios'
 
-function NavBar(){
+function NavBar(props){
     // const handleChange = (e)=>{
     //     let x = e.target.value
     //     if (x === '3'){
@@ -31,10 +31,9 @@ function NavBar(){
                     </li>
 
                 </ul>
-
-                <div id='logger' className='mb-2 mr-2 mb-lg-0'>
-                    <Link to ='/login' ><button className='btn btn-outline-danger'>LOGIN/SIGNUP</button></Link>
-                </div>
+                
+                { props.logger() }
+                
                 <form className="d-flex">
                     <input className="form-control mr-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button className="btn btn-danger" type="submit">Search</button>

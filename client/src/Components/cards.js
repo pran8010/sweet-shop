@@ -39,10 +39,13 @@ class Cards extends React.Component {
     }
 
     handleChange = (e)=>{
-        if (e.target.value>this.props.storeQty) this.setState({
+        if (e.target.value>this.props.storeQty) {
+            this.setState({
             message: 'Item Out Of Stock or Quantiy is not available',
             cartingStat: true
-        })
+            })
+            this.props.addToast('Item Out Of Stock or Quantiy is not available', {appearance: 'error', autoDismiss: true})
+        }
         else this.setState({
             quantity: parseFloat(e.target.value),
             cartingStat: false,
@@ -57,6 +60,7 @@ class Cards extends React.Component {
             this.setState({
                 message: 'Please set quantity'
             })
+            this.props.addToast('Please set quantity', {appearance: 'error', autoDismiss: true})
         } else {
             Axios({
                 method: "post",
@@ -71,6 +75,7 @@ class Cards extends React.Component {
                     this.setState({
                         message: res.data
                     })
+                    this.props.addToast('Please login to add item to cart', {appearance: 'error', autoDismiss: true})
                 }
                 else if (res.data==='Success') {
                     // e.target.value = 'In Cart'
@@ -78,7 +83,7 @@ class Cards extends React.Component {
                         message: 'Added to Cart successfully',
                         cartingStat: true
                     })
-
+                    this.props.addToast('Added to Cart successfully', {appearance: 'success', autoDismiss: true})
                 }
             })}
     }

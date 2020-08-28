@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 // import {Redirect} from 'react-router-dom'
 // import { useToasts } from "react-toast-notifications";
 
@@ -35,13 +36,17 @@ class Login extends React.Component{
             // headers: {"Access-Control-Allow-Origin": "*"}
           }).then((res)=>{
             console.log(res)
-            if (res.data === 'user already registered') alert(res.data)
+            if (res.data === 'user already registered') {
+                alert(res.data)
+                this.props.addToast('Email already exists in database. Please  try Logging in or else use a different email ID',{appearance: 'error', autoDismiss: true})
+            }
             else {
                 alert('registered successfully')
-                window.location.replace('/home')
-                // this.setState({
-                //     logStat: true
-                // })
+                this.props.addToast('Registered and Logged In Successfully', { appearance: 'success', autoDismiss: true })
+                // window.location.replace('/home')
+                this.setState({
+                    logStat: true
+                })
             }
         }).catch (err => console.log(err))
         
@@ -60,17 +65,18 @@ class Login extends React.Component{
             }
         }).then(res=>{
             if (res.data === 'success'){
-                // addToast('Logged In Successfully', { appearance: 'success' })
-                window.location.replace('/home')
-                // this.setState({
-                //     emailLog: '',
-                //     passwordLog: '',
-                //     logStat: true
-                // })
+                // window.location.replace('/home')
+                this.props.addToast('Logged In Successfully', { appearance: 'success', autoDismiss: true })
+                
+                this.setState({
+                    emailLog: '',
+                    passwordLog: '',
+                    logStat: true
+                })
             }
             else if (res.data === 'noUser'){
                 alert('Your Credentials are either wrong or do not exist in our database!')
-                // addToast('Invalid credentials', { appearance: 'error' })
+                this.props.addToast('Invalid credentials', { appearance: 'error', autoDismiss: true })
             }
         })
     }
@@ -83,7 +89,10 @@ class Login extends React.Component{
     }
 
     render(){
-        // if (this.state.logStat) return <Redirect to='/home' />
+        if (this.state.logStat){
+            this.props.props.logFn()
+            return <Redirect to='/home' />
+        } 
         return(
             <div className='col-sm-8 m-4 p-4 bg-light rounded-lg'>
                 <h2>LOGIN</h2>

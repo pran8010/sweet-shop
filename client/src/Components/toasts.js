@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useToasts } from "react-toast-notifications";
 
-const Toasts = (content, appearance)=>{
+const Toast = ()=>{
     const { addToast } = useToasts()
-    addToast(content, {appearance})
+    useEffect(() => {
+    addToast('You are now Logged OUT', {appearance: 'warning', autoDismiss: true})
+    })
+    return (
+        <div></div>
+    )
 }
-
-export default Toasts
+export default Toast

@@ -45,6 +45,7 @@ class CartsCard extends React.Component{
                     cartingStat: true
                 })
                 this.props.totGen(`-${rate}`,cosQty)
+                this.props.addToast('Deleted Item from cart', { appearance: 'info', autoDismiss: true })
             }
             else alert(res.data)
         })
