@@ -68,13 +68,15 @@ class App extends React.Component{
       }
       else {
         return(
-          <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
-            <option value ='' disabled selected>Account</option>
-            <option value = '/users/cart'>Cart 🛒</option>
-            <option value="/users/Uorders">Your Orders</option>
-            <option value="/users/account">Account</option>
-            <option value="3">Sign Out</option>
-          </select>
+          <div id='logger' className='mb-2 mr-2 mb-lg-0'>
+            <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
+              <option value ='' disabled selected>Account</option>
+              <option value = '/users/cart'>Cart 🛒</option>
+              <option value="/users/Uorders">Your Orders</option>
+              <option value="/users/account">Account</option>
+              <option value="3">Sign Out</option>
+            </select>
+          </div>
         )
       }
     }
