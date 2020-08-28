@@ -107,6 +107,7 @@ class App extends React.Component{
         this.setState({
           page: x
         })
+        // window.location.replace(x)
         e.target.value = ''
       }
   }
