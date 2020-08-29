@@ -20,6 +20,7 @@ import Toast from './Components/toasts';
 import ToastEn from './Components/toastEnabler';
 import ErrorPage from './Components/errorPage';
 import ScrollToTop from './Components/scrollToTop';
+import Logout from './Components/logout';
 
 
 
@@ -43,6 +44,7 @@ class App extends React.Component{
       page: ''
     }
     this.handleLoggedIn = this.handleLoggedIn.bind(this);
+    this.handleLoggedOut = this.handleLoggedOut.bind(this);
     this.navTemp = this.navTemp.bind(this)
     // this.logCheck = this.logCheck(this)
   }
@@ -71,13 +73,24 @@ class App extends React.Component{
       else {
         return(
           <div id='logger' className='mb-2 mr-2 mb-lg-0'>
-            <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
+            {/* <select className="form-select" aria-label="Default select example" onChange={this.handleChange}>
               <option value ='' disabled selected>Account</option>
               <option value = '/users/cart'>Cart 🛒</option>
               <option value="/users/Uorders">Your Orders</option>
               <option value="/users/account">Account</option>
               <option value="3">Sign Out</option>
-            </select>
+            </select> */}
+            <div className="dropdown">
+              <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                User button
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><Link className="dropdown-item" to='/users/cart' >Cart <span>🛒</span></Link></li>
+                <li><Link className="dropdown-item" to='/users/Uorders' >Your Orders </Link></li>
+                <li><Link className="dropdown-item" to='/users/account' > Account Details</Link></li>
+                <li><Link className="dropdown-item" to='/logout' > Logout </Link></li>
+              </ul>
+            </div>
           </div>
         )
       }
@@ -88,31 +101,37 @@ class App extends React.Component{
       logStatus: true
     })
   }
+    handleLoggedOut = ()=>{
+      this.setState({
+        logStatus: false,
+        message: 'Please login to use Carts, wishlist etc.. Features'
+      })
+    }
 
-    handleChange = (e)=>{
-      let x = e.target.value
-      if (x === '3'){
-          axios({
-              method: 'get',
-              url: '/api/logout',
-          }).then((res)=>{
-            if (res.data==='out') {
-              this.setState({
-                logStatus: false,
-                message: 'Please login to use Carts, wishlist etc.. Features',
-                page: '/home'
-              })
-            }
-          })
-      }
-      else {
-        this.setState({
-          page: x
-        })
-        // window.location.replace(x)
-        e.target.value = ''
-      }
-  }
+  //   handleChange = (e)=>{
+  //     let x = e.target.value
+  //     if (x === '3'){
+  //         axios({
+  //             method: 'get',
+  //             url: '/api/logout',
+  //         }).then((res)=>{
+  //           if (res.data==='out') {
+  //             this.setState({
+  //               logStatus: false,
+  //               message: 'Please login to use Carts, wishlist etc.. Features',
+  //               page: '/home'
+  //             })
+  //           }
+  //         })
+  //     }
+  //     else {
+  //       this.setState({
+  //         page: x
+  //       })
+  //       // window.location.replace(x)
+  //       e.target.value = ''
+  //     }
+  // }
 
   componentDidMount = async()=>{
     axios({
@@ -131,19 +150,19 @@ class App extends React.Component{
 
   render() {
     let { message, logStatus, page } = this.state
-    const redirection = ()=>{
-      if (page){
-        let temp = page
-        this.setState({
-          page: ''
-        })
-      if (temp==='/home')return ([
-          <Toast />,
-          <Redirect to= {temp} />
-        ])
-      else return (<Redirect to={temp} />)
-      }
-    }
+    // const redirection = ()=>{
+    //   if (page){
+    //     let temp = page
+    //     this.setState({
+    //       page: ''
+    //     })
+    //   if (temp==='/home')return ([
+    //       <Toast />,
+    //       <Redirect to= {temp} />
+    //     ])
+    //   else return (<Redirect to={temp} />)
+    //   }
+    // }
     return (
       <Router>
         <ScrollToTop />
@@ -151,14 +170,17 @@ class App extends React.Component{
           { logStatus ? <NavBar logger = {this.navTemp} />: <NavBar logger = {this.navTemp} /> }
           {message ? <Message msg={message} /> : null}
           <ToastProvider >
-            {
+
+            {/* {
               redirection()
-            }
+            } */}
+
           {/* <ToastEn>
             {content, appearance => } */}
             <Switch>
               <Route path ='/' exact component={Home} />
               <Route path ='/home' component={Home} />
+              <Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />
               { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
               <Route path='/catalogue' component={ToastEn(Catalogue)} />
               <Route path='/admin/addItem' component={ToastEn(AddItems)} />
