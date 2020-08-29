@@ -20,8 +20,8 @@ class CheckOut extends React.Component{
 
     tabHandler = ()=>{
         let {page} = this.state
-        if (page === 1) return(< AddressHandle setTab = {this.setTab}/>)
-        else if (page === 2) return(< Confirmation cart={this.props.cart} total={this.props.total} setTab = {this.setTab} />)
+        if (page === 1) return(< AddressHandle key='1' setTab = {this.setTab}/>)
+        else if (page === 2) return(< Confirmation key='2' cart={this.props.cart} total={this.props.total} setTab = {this.setTab} />)
         return ('Error')
     }
 

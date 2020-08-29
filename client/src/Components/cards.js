@@ -89,9 +89,12 @@ class Cards extends React.Component {
     }
 
     render(){
-        let { message, cartingStat, quantity } = this.state
+        let { prod_id, message, cartingStat, quantity } = this.state
         return(
             <div className="card m-3" style={{width: "20.5rem", borderColor: cartingStat ? "red": "green"}}>
+                <div className="card-header">
+                    <p className='text-center lh-lg font-weight-bold align-middle'><strong>ID:</strong>{prod_id}</p>
+                </div>
                 { message ? <Message msg={message} /> : null}
                 <img src={`/uploads/${this.props.name}.jpg`} className="card-img-top" alt={`${this.props.name}`} />
                 <div className="card-body">
@@ -111,7 +114,7 @@ class Cards extends React.Component {
                     <li className="list-group-item">
                         <div className="input-group">
                             <label className="input-group-text" htmlFor="quantity"><strong>Quantity</strong></label>
-                            <select className="form-select" id="quantity" onChange={this.handleChange} disabled={quantity>this.props.storeQty} >
+                            <select className="form-select" id="quantity" onChange={this.handleChange} disabled={cartingStat||quantity>this.props.storeQty} >
                                 <option disabled selected>Choose quantity </option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>

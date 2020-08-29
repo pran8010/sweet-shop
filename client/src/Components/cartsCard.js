@@ -1,6 +1,7 @@
 import React from 'react'
 import Axios from 'axios'
 import Cart from './carts'
+import { Redirect } from 'react-router-dom'
 
 class CartsCard extends React.Component{
     constructor(props){
@@ -52,35 +53,35 @@ class CartsCard extends React.Component{
     }
 
     render(){
-        let {rate, branch, cosQty, message, storeQty, cartingStat, name} = this.state
+        let { id, rate, branch, cosQty, message, storeQty, cartingStat, name} = this.state
         if (cartingStat) return null 
         return(
-            <div className="card mb-3" style={{"max-width": "540px"}}>
+            <div className="card mb-3" style={{"maxWidth": "540px"}} onClick={()=> window.location.replace(`/catalogue#${id}`)}>
             <div className="row g-0">
                 <div className="col-md-4 p-2 text-center d-flex align-items-center">
-                    <img src={`../uploads/${name}.jpg`} className = 'text-center'style={{"max-width": "185px", width: "100%"}}  alt={name} />
+                    <img src={`../uploads/${name}.jpg`} className = 'text-center'style={{"maxWidth": "185px", width: "100%"}}  alt={name} />
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
                         <h5 className="card-title">{name}</h5>
                     </div>
                     <hr></hr>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
+                    <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
                         <div className="input-group">
                             <span className="input-group-text"><strong>Rate</strong></span>
                             <span className="input-group-text">₹</span>
                             <input type="text" aria-label="Rate" className="form-control bg-light" value={rate} readOnly />
                         </div>
                         </li>
-                        <li class="list-group-item">
+                        <li className="list-group-item">
                             <div className="input-group">
                                 <span className="input-group-text" htmlFor="quantity"><strong>Quantity</strong></span>
                                 <input type="text" aria-label="Quantity" className="form-control bg-light" value={cosQty}readOnly />
                                 <span className="input-group-text">kg</span>
                             </div>
                         </li>
-                        <li class="list-group-item">
+                        <li className="list-group-item">
                             {/* <div className="input-group">
                                 <span className="input-group-text"><strong>Branch</strong></span>
                                 <input type="text" aria-label="Branch" className="form-control bg-light" value={branch} readOnly />

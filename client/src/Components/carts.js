@@ -81,7 +81,7 @@ class Cart extends React.Component{
                         <div>
                             <span><strong>TOTAL AMT: </strong>₹{total}</span>
                         </div>
-                        <div class="modal fade" id="checkOut" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div className="modal fade" id="checkOut" data-backdrop="static" data-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <CheckOut cart={cart} total={total} />
                         </div>
 

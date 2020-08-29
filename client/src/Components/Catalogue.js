@@ -12,11 +12,17 @@ class Catalogue extends React.Component{
         this.cardGen = this.cardGen.bind(this)
     }
 
+    CancelToken = axios.CancelToken;
+    source = this.CancelToken.source();
+
+    abortController = new AbortController();
+
     componentDidMount = ()=>{
         var self = this
         axios({
             method: 'get',
             url: '/api/catalogue',
+            cancelToken: this.source.token
             // headers: {"Access-Control-Allow-Origin": "*"}
           }).then((res)=>{
             console.log(res.data)
@@ -25,10 +31,13 @@ class Catalogue extends React.Component{
           })
 
     }
+    componentWillUnmount = ()=>{
+        this.source.cancel("Operation canceled by the user.");
+    }
 
     cardGen = ()=>{
         var list = this.state.products.map((item)=>
-            <div key={item._id}>
+            <div key={item._id} id={item._id}>
                 <Cards name = {item.name} description = {item.description} rate = {item.rate} branch={item.branch} ID={item._id} storeQty={item.quantity} addToast = {this.props.addToast} /> 
             </div>
         )
