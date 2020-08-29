@@ -65,7 +65,7 @@ class App extends React.Component{
     navTemp = ()=>{
       if (!this.state.logStatus){
         return (
-          <div id='logger' className='mb-2 mr-2 mb-lg-0'>
+          <div id='logger' className='mb-2 mr-2 mb-lg-0' data-toggle="collapse" data-target="#navbarTogglerDemo02">
             <Link to ='/login' ><button className='btn btn-outline-danger'>LOGIN/SIGNUP</button></Link>
         </div>
         )
