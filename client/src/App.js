@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { ToastProvider, useToasts } from "react-toast-notifications";
 
-import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Link, Switch } from 'react-router-dom'
 import axios from 'axios' 
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
@@ -18,6 +18,8 @@ import Uorders from './Components/orders'
 import './App.css';
 import Toast from './Components/toasts';
 import ToastEn from './Components/toastEnabler';
+import ErrorPage from './Components/errorPage';
+import ScrollToTop from './Components/scrollToTop';
 
 
 
@@ -144,6 +146,7 @@ class App extends React.Component{
     }
     return (
       <Router>
+        <ScrollToTop />
           <div className="App">
           { logStatus ? <NavBar logger = {this.navTemp} />: <NavBar logger = {this.navTemp} /> }
           {message ? <Message msg={message} /> : null}
@@ -153,13 +156,16 @@ class App extends React.Component{
             }
           {/* <ToastEn>
             {content, appearance => } */}
-            <Route path ='/' exact component={Home} />
-            <Route path ='/home' component={Home} />
-            { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
-            <Route path='/catalogue' component={ToastEn(Catalogue)} />
-            <Route path='/admin/addItem' component={ToastEn(AddItems)} />
-            { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
-            { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
+            <Switch>
+              <Route path ='/' exact component={Home} />
+              <Route path ='/home' component={Home} />
+              { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
+              <Route path='/catalogue' component={ToastEn(Catalogue)} />
+              <Route path='/admin/addItem' component={ToastEn(AddItems)} />
+              { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
+              { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
+              <Route component={ErrorPage} />
+            </Switch>
           {/* </ToastEn> */}
           </ToastProvider>
           <Footer />
