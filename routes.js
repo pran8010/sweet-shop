@@ -21,7 +21,7 @@ app.get('/api/checkAuth', (req, res)=>{
   }
 })
 
-app.get('/api/test2',(req, res)=>{
+app.get('/api/test2',ensureAuthenticated,(req, res)=>{
   console.log(req.user)
   res.json(req.user)
 })
