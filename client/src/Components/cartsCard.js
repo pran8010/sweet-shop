@@ -56,9 +56,9 @@ class CartsCard extends React.Component{
         let { id, rate, branch, cosQty, message, storeQty, cartingStat, name} = this.state
         if (cartingStat) return null 
         return(
-            <div className="card mb-3" style={{"maxWidth": "540px"}} onClick={()=> window.location.replace(`/catalogue#${id}`)}>
+            <div className="card mb-3" style={{"maxWidth": "540px"}}>
             <div className="row g-0">
-                <div className="col-md-4 p-2 text-center d-flex align-items-center">
+                <div className="col-md-4 p-2 text-center d-flex align-items-center" onClick={()=> window.location.replace(`/catalogue#${id}`)}>
                     <img src={`../uploads/${name}.jpg`} className = 'text-center'style={{"maxWidth": "185px", width: "100%"}}  alt={name} />
                 </div>
                 <div className="col-md-8">

@@ -166,7 +166,7 @@ class App extends React.Component{
     return (
       <Router>
         <ScrollToTop />
-          <div className="App">
+          <div className="App vw-100">
           { logStatus ? <NavBar logger = {this.navTemp} />: <NavBar logger = {this.navTemp} /> }
           {message ? <Message msg={message} /> : null}
           <ToastProvider >
