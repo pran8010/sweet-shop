@@ -7,6 +7,7 @@ class AddressHandle extends React.Component{
         super(props)
         this.state = {
             name: '',
+            phone: '',
             plotNo: '',
             street: '',
             area: '',
@@ -72,12 +73,12 @@ class AddressHandle extends React.Component{
 
     handleSubmit = (e)=>{
         e.preventDefault()
-        let {name, plotNo, street, area, addressO, landmark, city, state, country, pin} = this.state
+        let {name, phone, plotNo, street, area, addressO, landmark, city, state, country, pin} = this.state
         Axios({
             method: 'post',
             url: '/api/users/address',
             data: {
-                name, plotNo, street, area, addressO, landmark, city, state, country, pin
+                name, phone, plotNo, street, area, addressO, landmark, city, state, country, pin
             }
         }).then((res)=>{
             console.log(res.data)
@@ -90,7 +91,7 @@ class AddressHandle extends React.Component{
     }
         
     render(){
-        let { addCheck, message, name, plotNo, street, area, addressO, landmark, city, state, country, pin, next } = this.state
+        let { addCheck, message, name, phone, plotNo, street, area, addressO, landmark, city, state, country, pin, next } = this.state
         return(
                 [
                 <div className="modal-header pt-4">
@@ -106,6 +107,10 @@ class AddressHandle extends React.Component{
                         <div className="col-md-12">
                             <label htmlFor="name" className="form-label">Name</label>
                             <input type="text" className="form-control" id="name" value={name} onChange={this.handleChange} readOnly={addCheck} required={!addCheck} />
+                        </div>
+                        <div className="col-md-3">
+                            <label htmlFor="phone" className="form-label">Mobile Number</label>
+                            <input type="number" className="form-control" id="phone" value={phone} onChange={this.handleChange} readOnly={addCheck} maxLength='12' minLength='10' required={!addCheck} />
                         </div>
                         <div className="col-md-12">
                             <label htmlFor="plotNo" className="form-label">Plot No./ House No.</label>
