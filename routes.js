@@ -282,11 +282,13 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
 
   app.get('/api/users/address', ensureAuthenticated, (req, res)=>{
     var user = req.user
-    db.collection('users').findOne(user, (err, doc)=>{
-      if(err) return res.send('Error')
-      else if (!doc.address) return res.send('no address')
-      else return res.json(doc.address)
-    })
+    // db.collection('users').findOne(user, (err, doc)=>{
+    //   if(err) return res.send('Error')
+    //   else if (!doc.address) return res.send('no address')
+    //   else return res.json(doc.address)
+    // })
+    if (!user.address) return res.send('no address')
+    return res.json(user.address)
   })
 
 // ------------------- listening port ---------------------
