@@ -12,7 +12,8 @@ class Cards extends React.Component {
             prod_id: this.props.ID,
             quantity: 0,
             message: '',
-            cartingStat: false
+            cartingStat: false,
+            qtyUnit: 'kg'
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleCarting = this.handleCarting.bind(this)
@@ -89,7 +90,7 @@ class Cards extends React.Component {
     }
 
     render(){
-        let { prod_id, message, cartingStat, quantity } = this.state
+        let { prod_id, message, cartingStat, quantity, qtyUnit } = this.state
         return(
             <div className="card m-3" style={{width: "20.5rem", borderColor: cartingStat ? "red": "green"}}>
                 <div className="card-header">
@@ -114,13 +115,19 @@ class Cards extends React.Component {
                     <li className="list-group-item">
                         <div className="input-group">
                             <label className="input-group-text" htmlFor="quantity"><strong>Quantity</strong></label>
-                            <select className="form-select" id="quantity" onChange={this.handleChange} disabled={cartingStat||quantity>this.props.storeQty} >
-                                <option disabled selected>Choose quantity </option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select className="form-select p-1" id="quantity" onChange={this.handleChange} disabled={cartingStat||quantity>this.props.storeQty} >
+                                <option disabled selected>Pick a Quantity</option>
+                                <option value="0.25">{qtyUnit ==='kg' ? '0.25 kg': '250 gms'}</option>
+                                <option value="0.50">{qtyUnit ==='kg' ? '0.50 kg': '500 gms'}</option>
+                                <option value="0.75">{qtyUnit ==='kg' ? '0.75 kg': '750 gms'}</option>
+                                <option value="1.00">{qtyUnit ==='kg' ? '1.00 kg': '1000 gms'}</option>
+                                <option value="2.00">{qtyUnit ==='kg' ? '2.00 kg': '2000 gms'}</option>
                             </select>
-                            <span className="input-group-text">kg</span>
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{qtyUnit}</button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a class="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'kg'})}>Kg</a></li>
+                                <li><a class="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'gms'})}>gms</a></li>
+                            </ul>
                         </div>
                     </li>
                     <li className="list-group-item">
