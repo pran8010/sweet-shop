@@ -68,7 +68,7 @@ class Confirmation extends React.Component{
                 <div className="modal-footer">
                     <button className="btn btn-primary" onClick={this.tabHandle} >Prev</button>
                     <button  className="btn btn-success ml-auto" >Pay</button>
-                </div>,
+                </div>
             ]
         )
     }

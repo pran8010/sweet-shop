@@ -92,7 +92,7 @@ class Cards extends React.Component {
     render(){
         let { prod_id, message, cartingStat, quantity, qtyUnit } = this.state
         return(
-            <div className="card m-3" style={{width: "20.5rem", borderColor: cartingStat ? "red": "green"}}>
+            <div className="card m-3" style={{maxWidth: "20.5rem", borderColor: cartingStat ? "red": "green"}}>
                 <div className="card-header">
                     <p className='text-center lh-lg font-weight-bold align-middle'><strong>ID:</strong>{prod_id}</p>
                 </div>

@@ -14,6 +14,7 @@ class Login extends React.Component{
             passwordLog: '',
             emailReg:'',
             passwordReg:'',
+            passwordReg2: '',
             logStat: false
         }
         this.handleChange = this.handleChange.bind(this)
@@ -22,10 +23,9 @@ class Login extends React.Component{
     }
 
     handleRegSubmit = (e) => {
-        const {emailReg, passwordReg} = this.state
-        console.log(this.state)
-
         e.preventDefault()
+        const {emailReg, passwordReg, passwordReg2} = this.state
+        if (passwordReg2 !== passwordReg) return this.props.addToast('Please use the same password in the re-enter password field', {appearance: 'error', autoDismiss: true}) 
         axios({
             method: 'post',
             url: '/api/register',
@@ -92,7 +92,8 @@ class Login extends React.Component{
         if (this.state.logStat){
             this.props.props.logFn()
             return <Redirect to='/home' />
-        } 
+        }
+        let { passwordReg, passwordReg2 } = this.state
         return(
             <div className='col-sm-8 m-4 p-4 bg-light rounded-lg'>
                 <h2>LOGIN</h2>
@@ -120,13 +121,13 @@ class Login extends React.Component{
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                        <input type="password" className="form-control" name = 'passwordReg' placeholder='Enter your password' id="exampleInputPassword1" onChange = {this.handleChange} required />
+                        <input type="password" minLength='8' className="form-control" name = 'passwordReg' placeholder='Enter your password' id="exampleInputPassword1" onChange = {this.handleChange} required />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputPassword2" className="form-label">Password</label>
-                        <input type="password" className="form-control" name = 'passwordReg2' id="exampleInputPassword2" placeholder='Confirm your password' onChange = {this.handleChange} required />
+                        <input type="password" minLength='8' className="form-control" name = 'passwordReg2' id="exampleInputPassword2" placeholder='Re-enter your password' onChange = {this.handleChange} required />
                     </div>
-                    <span id='msg' style={{color: "red"}}></span>
+                    {passwordReg!==passwordReg2 ? <p id='msg' style={{color: "red"}}>Please re-enter same password</p> : null}
                     <input type="submit" className="btn btn-outline-danger" value='Register' />
                 </form>
             </div>
