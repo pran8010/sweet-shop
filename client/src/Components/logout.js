@@ -5,25 +5,47 @@ import { useToasts } from 'react-toast-notifications'
 
 const Logout = ({logFn})=>{
 
-    const [ logStat, setLogStat ] = useState('')
+    const [ logStat, setLogStat ] = useState(true)
     const { addToast } = useToasts()
 
     useEffect(()=>{
-        Axios({
-            method: 'get',
-            url: '/api/logout',
-        }).then((res)=>{
-            if (res.data==='out') {
-                logFn()
-                setLogStat(false)
-                addToast('You have Logged Out', {appearance: 'warning', autoDismiss: true})
-            }
-        })
-    },[logStat, logFn])
-    return (
+        let source = Axios.CancelToken.source();
+        const loadData = ()=>{
+            Axios({
+                method: 'get',
+                url: '/api/logout',
+                cancelToken: source.token
+            }).then((res)=>{
+                if (res.data==='out') {
+                    addToast('You have Logged Out', {appearance: 'warning', autoDismiss: true})
+                    setLogStat(false)
+                    logFn()
+                }
+            }).catch(err=>{
+                if (Axios.isCancel(err)) {
+                    console.log(`call for logout was cancelled`);
+                  } else {
+                    throw err;
+                  }
+            })    
+        }
+
+        loadData()
+        return () => {
+            // Let's cancel the request on effect cleanup
+            source.cancel();
+          };
+
+    },[logFn])
+
+    if (logStat) return (
         <div>
-            {!logStat ? <Redirect to='/home' /> : null}
             loggin out.....
+        </div>
+    )
+    else return (
+        <div>
+            <Redirect to='/home' />
         </div>
     )
 }

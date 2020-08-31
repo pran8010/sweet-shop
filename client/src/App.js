@@ -180,7 +180,7 @@ class App extends React.Component{
             <Switch>
               <Route path ='/' exact component={Home} />
               <Route path ='/home' component={Home} />
-              <Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />
+              {logStatus?<Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />:<Route path='/logout' component={Home} />}
               { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
               <Route path='/catalogue' component={ToastEn(Catalogue)} />
               <Route path='/admin/addItem' component={ToastEn(AddItems)} />
