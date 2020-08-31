@@ -39,8 +39,11 @@ const Logout = ({logFn})=>{
     },[logFn])
 
     if (logStat) return (
-        <div>
-            loggin out.....
+        <div className='d-flex align-items-center justify items-center flex-column m-5 p-5'>
+            <h1 className='text-center'>..... Logging Out .....</h1>
+            <div className=" spinner-border " style={{"width": "7rem", height: "7rem", "marginTop": '5rem', margin: 'auto', "fontSize": "xx-large", color: "red"}} role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
         </div>
     )
     else return (
