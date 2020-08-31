@@ -36,13 +36,13 @@ class Confirmation extends React.Component{
 
     render(){
         return(
-            <div>
+            [
                 <div className="modal-header">
                     <h5 className="modal-title" id="staticBackdropLabel">Confirmation</h5>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
+                </div>,
                 <div className="modal-body p-4">
                     <table class="table table-striped table-hover text-center">
                     <thead>
@@ -64,12 +64,12 @@ class Confirmation extends React.Component{
                     </table>
 
                     <h4>Total: ₹{this.props.total}</h4>
-                </div>
+                </div>,
                 <div className="modal-footer">
                     <button className="btn btn-primary" onClick={this.tabHandle} >Prev</button>
                     <button  className="btn btn-success ml-auto" >Pay</button>
-                </div>
-            </div>
+                </div>,
+            ]
         )
     }
 }

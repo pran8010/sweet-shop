@@ -28,7 +28,7 @@ class CheckOut extends React.Component{
     render(){
         return(
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl modal-fullscreen-lg-down ">
-                <div className="modal-content" style={{height: "95vh"}}>
+                <div className="modal-content" style={{height: "90vh"}}>
                     {this.tabHandler()}
                 </div>
             </div>
