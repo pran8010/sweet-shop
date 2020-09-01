@@ -2,7 +2,7 @@ import React from 'react';
 // import ReactDOM from 'react-dom';
 import { ToastProvider, useToasts } from "react-toast-notifications";
 
-import { BrowserRouter as Router, Route, Redirect, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios' 
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
@@ -21,6 +21,7 @@ import ToastEn from './Components/toastEnabler';
 import ErrorPage from './Components/errorPage';
 import ScrollToTop from './Components/scrollToTop';
 import Logout from './Components/logout';
+import Admin from './Components/administartor';
 
 
 
@@ -183,7 +184,7 @@ class App extends React.Component{
               {logStatus?<Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />:<Route path='/logout' component={Home} />}
               { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
               <Route path='/catalogue' component={ToastEn(Catalogue)} />
-              <Route path='/admin/addItem' component={ToastEn(AddItems)} />
+              <Route path='/admin' component={ToastEn(Admin)} />
               { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
               { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
               <Route component={ErrorPage} />

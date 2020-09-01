@@ -12,6 +12,13 @@ module.exports = function (app, db) {
     res.send('Not Logged In')
   };
 
+  function ensureAdmin(req, res, next){
+    if (req.user.email === 'admin777@sweetShop.admn'){
+      return next()
+    }
+    res.send('Not an admin')
+  }
+
 app.get('/api/checkAuth', (req, res)=>{
   if (req.isAuthenticated()){
     res.send('yes')
@@ -104,13 +111,18 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
 
 
   // -------------------------- ADMIN acesss Only --------------------------
+  
+
+  app.get('/api/admin/checkIfAdmin', ensureAuthenticated, ensureAdmin, (req, res)=>{
+    res.send('ADMIN')
+  })
 
   app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/img/'
   }));
 
-  app.post('/admin/api/addItems', (req, res) => {
+  app.post('/admin/api/addItems',ensureAuthenticated, ensureAdmin, (req, res) => {
     if (req.files === null) return res.send('no file')
     const img = req.files.image
     img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
@@ -144,7 +156,7 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     })
   })
 
-  app.post('/admin/api/updateItems', (req, res) => {
+  app.post('/admin/api/updateItems',ensureAuthenticated, ensureAdmin, (req, res) => {
     if (req.files !== null) {
       const img = req.files.image
       img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
@@ -179,6 +191,16 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
             else res.send('Update success')
           })
         }
+    })
+  })
+
+  app.get('/api/admin/deleteProduct/:ID', ensureAuthenticated, ensureAdmin, (req, res)=>{
+    var ID = new ObjectID(req.params.ID)
+    db.collection('sweets').deleteOne({_id: ID}, (err, doc)=>{
+      if (err) return res.send(err)
+      console.log(doc)
+      if ( doc.deletedCount === 0 ) res.send('Please use correct product ID')
+      else return res.send('Success')
     })
   })
 
