@@ -2,3 +2,25 @@
     width: 150px;
     height: 100px
 }
+
+.cart{
+    width: 70px;
+    height: 70px;
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    background-color: white;
+    border-width: 10px 10px;
+}
+
+.cart h4{
+    margin: auto;
+}
+
+.cart:hover{
+    bottom: 48px;
+    right: 13px;
+    box-shadow: none;
+    transition-duration: 300ms;
+    background-color: rgba(255, 217, 0, 0.815);
+}
