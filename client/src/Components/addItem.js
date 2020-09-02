@@ -14,6 +14,7 @@ class AddItems extends React.Component{
             rate: '',
             image: '',
             branch: '',
+            type: '',
             message: '',
             UpPercent: 0,
             updateOrNot: true
@@ -28,9 +29,12 @@ class AddItems extends React.Component{
             this.setState({image: e.target.files[0]})
         }
         else if(e.target.name === 'updateOrNot'){
-            if (!this.state.updateOrNot) this.props.addToast('Update item {Name & Branch} fields required', {appearance: 'info', autoDismiss: true})
+            // if (!this.state.updateOrNot) {
+            //     this.setState(prevState => ({updateOrNot : !prevState.updateOrNot}))
+            //     this.props.addToast('Update item {Name & Branch} fields required', {appearance: 'info', autoDismiss: true})
+            // }
 
-            else this.props.addToast('Add a new item all fields required', {appearance: 'info', autoDismiss: true})
+            // else {this.props.addToast('Add a new item all fields required', {appearance: 'info', autoDismiss: true})}
             this.setState(prevState => ({updateOrNot : !prevState.updateOrNot}))
         }
         else{
@@ -41,7 +45,7 @@ class AddItems extends React.Component{
     }
 
     handleSubmit = (e) => {
-        const {name,description,quantity,rate,image,branch,updateOrNot} = this.state
+        const { name,description,quantity,rate,image,branch,type,updateOrNot } = this.state
         e.preventDefault();
         var form = new FormData()
         form.append('name',name);
@@ -49,7 +53,8 @@ class AddItems extends React.Component{
         (quantity!=='')&&form.append('quantity',parseFloat(quantity));
         (rate!=='')&&form.append('rate',rate);
         (image!=='')&&form.append('image',image);
-        (branch!=='')&&form.append('branch',branch);
+        (branch!=='')&&form.append('supplier',branch);
+        (type!=='')&&form.append('type',type);
         
         // console.log(form)
         if (updateOrNot === true){
@@ -95,7 +100,7 @@ class AddItems extends React.Component{
         var {updateOrNot, UpPercent, message} = this.state
         return(
             <h1>Admin Page</h1>,
-            <form className='col-sm-7 m-4' onSubmit={this.handleSubmit}>
+            <form className='col-sm-7 m-4 bg-light p-4' onSubmit={this.handleSubmit}>
                 {message ? <Message msg={message} /> : null}
                 <div className="mb-3">
                     <label htmlFor="Name" className="form-label">Name of Sweet</label>
@@ -115,7 +120,7 @@ class AddItems extends React.Component{
                 <div className='mb-3'>
                     <div className="input-group">
                         <span className="input-group-text" >Quantity</span>
-                        <input type="number" step='0.1' min='0' id="Quantity" name ='quantity' className="form-control" placeholder=' XXX KGs..' aria-label="Quantity" aria-describedby="QuantityHelp" required={updateOrNot} onChange={this.handleChange} />
+                        <input type="number" step='0.001' min='0' id="Quantity" name ='quantity' className="form-control" placeholder=' XXX KGs..' aria-label="Quantity" aria-describedby="QuantityHelp" required={updateOrNot} onChange={this.handleChange} />
                     </div>
                     <div id="QuantityHelp" className="form-text">Please enter dispatch Quantiy of sweet (in kgs..).</div>
                 </div>
@@ -138,12 +143,23 @@ class AddItems extends React.Component{
                     </div>
                 </div>
                 <div className="input-group mb-3">
-                    <label className ="input-group-text" htmlFor="Branch">Branch</label>
+                    <label className ="input-group-text" htmlFor="Branch">Supplier</label>
                     <select className="form-select" name = 'branch' id="Branch" required onChange={this.handleChange} >
-                        <option disabled selected>Choose the Branch...</option>
+                        <option disabled selected>Choose the supplier...</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
+                    </select>
+                </div>
+                <div className="input-group mb-3">
+                    <label className ="input-group-text" htmlFor="type">Item Type</label>
+                    <select className="form-select" name = 'type' id="type" required={updateOrNot} onChange={this.handleChange} >
+                        <option disabled selected>Item Type</option>
+                        <option value="Sweet">Sweet</option>
+                        <option value="Hot">Hot</option>
+                        <option value="Nuts">Nuts</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Eggs">Eggs</option>
                     </select>
                 </div>
 

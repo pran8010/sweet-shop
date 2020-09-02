@@ -7,7 +7,7 @@ import axios from 'axios'
 import NavBar from './Components/NavBar'
 import Login from './Components/login'
 import Home from './Components/home'
-import Catalogue from "./Components/Catalogue";
+// import Catalogue from "./Components/Catalogue";
 import AddItems  from "./Components/addItem";
 import Footer from './Components/footer';
 import Message from './Components/customAlert';
@@ -22,6 +22,8 @@ import ErrorPage from './Components/errorPage';
 import ScrollToTop from './Components/scrollToTop';
 import Logout from './Components/logout';
 import Admin from './Components/administartor';
+import Catalogue from './Components/newCatlogue';
+import CatalogueX from './Components/OldCatalogue';
 
 
 
@@ -183,7 +185,12 @@ class App extends React.Component{
               <Route path ='/home' component={Home} />
               {logStatus?<Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />:<Route path='/logout' component={Home} />}
               { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
-              <Route path='/catalogue' component={ToastEn(Catalogue)} />
+              <Route path='/catalogue' exact component={Catalogue} />
+              <Route path='/catalogue/sweets' component={()=><CatalogueX type='Sweet' />} />
+              <Route path='/catalogue/hots' component={()=><CatalogueX type='Hot' />} />
+              <Route path='/catalogue/nuts' component={()=><CatalogueX type='Nuts' />} />
+              <Route path='/catalogue/bakery' component={()=><CatalogueX type='Bakery' />} />
+              <Route path='/catalogue/eggs' component={()=><CatalogueX type='Eggs' />} />
               <Route path='/admin' component={ToastEn(Admin)} />
               { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
               { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }

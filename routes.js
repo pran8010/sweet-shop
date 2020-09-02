@@ -132,7 +132,7 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     let sweet = req.body
     console.log(sweet)
 
-    db.collection('sweets').findOne({ name: sweet.name, branch: sweet.branch }, function (err, doc) {
+    db.collection('sweets').findOne({ name: sweet.name, supplier: sweet.supplier }, function (err, doc) {
         if(err) {
             next(err);
         } else if (doc) {
@@ -167,7 +167,7 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     let sweet = req.body
     console.log(sweet)
 
-    db.collection('sweets').findOne({ name: sweet.name, branch: sweet.branch }, function (err, doc) {
+    db.collection('sweets').findOne({ name: sweet.name, supplier: sweet.supplier }, function (err, doc) {
         if(err) {
             next(err);
         } else if (!doc) {
@@ -176,9 +176,9 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
             // res.redirect('/home');
             return;
         } else {
-          var quantity = parseFloat(sweet.quantity)
+          var quantity = sweet.quantity ? parseFloat(sweet.quantity) : 0.0
           delete sweet.quantity
-          db.collection('sweets').findOneAndUpdate({ name: sweet.name, branch: sweet.branch },
+          db.collection('sweets').findOneAndUpdate({ name: sweet.name, supplier: sweet.supplier },
             {
               $inc: { quantity: quantity},
               $set: {... sweet}
@@ -207,8 +207,16 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
 
   // --------------- catalogue mangement ------------------
 
-  app.get('/api/catalogue', (req,res)=>{
-    db.collection('sweets').find().toArray().then((docs)=>{
+  app.get('/api/catalogue/:type', (req,res)=>{
+    db.collection('sweets').find({type: req.params.type}).toArray().then((docs)=>{
+      console.log(docs)
+      res.json(docs)
+    })
+  })
+
+  app.get('/api/display/:type', (req, res)=>{
+    db.collection('sweets').find({type: req.params.type}).limit(4).toArray()
+    .then(docs =>{
       console.log(docs)
       res.json(docs)
     })

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import Axios from 'axios'
 import AddItems from './addItem'
 import DeleteItems from './deleteItem'
+import ToastEn from './toastEnabler'
 
 const Admin = ()=>{
 
@@ -45,7 +46,7 @@ const Admin = ()=>{
                     <Link to='/admin/items'><button className='btn btn-success m-5 mr-auto'>Catalogue Editor</button></Link>
                     <Link to='/admin/deleteItem'><button className='btn btn-danger m-5'>Delete from Catalogue</button></Link>
                 </div>
-                <Route path='/admin/items' component={AddItems} />
+                <Route path='/admin/items' component={ToastEn(AddItems)} />
                 <Route path='/admin/deleteItem' component={DeleteItems} />
             </Router>
         </>

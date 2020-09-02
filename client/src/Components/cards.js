@@ -124,22 +124,22 @@ class Cards extends React.Component {
                                 <option value="2.00">{qtyUnit ==='kg' ? '2.00 kg': '2000 gms'}</option>
                             </select>
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{qtyUnit}</button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'kg'})}>Kg</a></li>
-                                <li><a class="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'gms'})}>gms</a></li>
+                            <ul className="dropdown-menu dropdown-menu-right">
+                                <li><a className="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'kg'})}>Kg</a></li>
+                                <li><a className="dropdown-item"  disabled onClick={()=>this.setState({qtyUnit: 'gms'})}>gms</a></li>
                             </ul>
                         </div>
                     </li>
                     <li className="list-group-item">
                         <div className="input-group">
-                            <span className="input-group-text"><strong>Branch</strong></span>
-                            <input type="text" aria-label="Branch" className="form-control bg-light" value={this.props.branch} readOnly />
+                            <span className="input-group-text"><strong>Supplier</strong></span>
+                            <input type="text" aria-label="Branch" className="form-control bg-light" value={this.props.supplier} readOnly />
                         </div>
                     </li>
                 </ul>
-                <div className="card-body">
+                <div className="card-body d-flex">
                     <button className="btn btn-warning" onClick={this.handleCarting} disabled={cartingStat||(quantity>this.props.storeQty)}>Add to Cart 🛒</button>
-                    <button className="btn btn-primary ml-5">Wishlist</button>
+                    <button className="btn btn-primary ml-auto">Wishlist</button>
                 </div>
             </div>
         )
