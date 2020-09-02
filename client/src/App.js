@@ -196,7 +196,7 @@ class App extends React.Component{
               { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
               <Route component={ErrorPage} />
             </Switch>
-            {logStatus&&<Link to='/users/cart'><div className='btn border-danger border cart rounded-circle'><h4><span>🛒</span>Cart</h4></div></Link>}
+            {logStatus&&<Link to='/users/cart'><div className='btn border-danger border cart rounded-circle'><h5><span>🛒</span>Cart</h5></div></Link>}
           {/* </ToastEn> */}
           </ToastProvider>
           <Footer />
