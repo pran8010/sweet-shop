@@ -186,11 +186,11 @@ class App extends React.Component{
               {logStatus?<Route path='/logout' component={()=><Logout logFn={this.handleLoggedOut} />} />:<Route path='/logout' component={Home} />}
               { !logStatus ? <Route path='/login' component={ToastEn(Login, {logFn: this.handleLoggedIn})} /> : null }
               <Route path='/catalogue' exact component={Catalogue} />
-              <Route path='/catalogue/sweets' component={()=><CatalogueX type='Sweet' />} />
-              <Route path='/catalogue/hots' component={()=><CatalogueX type='Hot' />} />
-              <Route path='/catalogue/nuts' component={()=><CatalogueX type='Nuts' />} />
-              <Route path='/catalogue/bakery' component={()=><CatalogueX type='Bakery' />} />
-              <Route path='/catalogue/eggs' component={()=><CatalogueX type='Eggs' />} />
+              <Route path='/catalogue/sweets'component={ToastEn(CatalogueX, {type: 'Sweet'})} />
+              <Route path='/catalogue/hots' component={ToastEn(CatalogueX, {type: 'Hot'})} />
+              <Route path='/catalogue/nuts' component={ToastEn(CatalogueX,{type:'Nuts'})} />
+              <Route path='/catalogue/bakery' component={ToastEn(CatalogueX, {type: 'Bakery'})} />
+              <Route path='/catalogue/eggs' component={ToastEn(CatalogueX, {type: 'Eggs'})} />
               <Route path='/admin' component={ToastEn(Admin)} />
               { logStatus ? <Route path='/users/cart' component={ToastEn(Cart)} /> : null }
               { logStatus ? <Route path='/users/Uorders' component={ToastEn(Uorders)} /> : null }
