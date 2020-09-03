@@ -31,7 +31,7 @@ class CartsCard extends React.Component{
             this.setState({
                 rate,branch,storeQty,name
             })
-            this.props.totGen(rate,cosQty)
+            // this.props.totGen(rate,cosQty)
         })
     }
 
@@ -45,7 +45,8 @@ class CartsCard extends React.Component{
                 this.setState({
                     cartingStat: true
                 })
-                this.props.totGen(`-${rate}`,cosQty)
+                // this.props.totGen(`-${rate}`,cosQty)
+                this.props.getTotal()
                 this.props.addToast('Deleted Item from cart', { appearance: 'info', autoDismiss: true })
             }
             else alert(res.data)

@@ -301,11 +301,11 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     // console.log(req.user)
     console.log(obj)
     db.collection('users').findOneAndUpdate(user,{
-      $push: { cart: obj }
+      $push: { cart: obj },
     },
     { new: true }, (err, doc)=>{
       if(err) {
-        res.send('Error')
+        res.send(err)
         console.log(err)
       }
       else{
@@ -313,7 +313,6 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
         console.log(doc)
       }
     } )
-
   })
 
   app.get('/api/users/removeCart/:ID' ,ensureAuthenticated, (req, res)=>{
@@ -344,6 +343,18 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     //     return res.json(doc.cart)
     //   }
     // })
+  })
+
+  app.get('/api/users/cartTotal', ensureAuthenticated, (req, res)=>{
+    let user = req.user
+    db.collection('sweets').find({_id: {$in:user.cart.map((item)=>ObjectID(item.prod_id))}}).project({rate: 1}).toArray().then((sweets)=>{
+    let total = user.cart.reduce((total, item, key)=>{
+      console.log(total)
+      return total+item.quantity*parseFloat(sweets[key].rate)
+    },0)
+    console.log(total)
+    res.send(total.toString())
+    })
   })
 
   app.get('/api/getSweet/:ID', (req, res)=>{

@@ -86,6 +86,7 @@ class Cards extends React.Component {
                     })
                     this.props.addToast('Added to Cart successfully', {appearance: 'success', autoDismiss: true})
                 }
+                else this.props.addToast(res.data, {appearance: 'error', autoDismiss: true})
             })}
     }
 

@@ -31,12 +31,18 @@ class Cart extends React.Component{
                 cart: res.data
             })
         })
+        this.getTotal()
     }
 
     getTotal = ()=>{
         Axios({
             method: 'get',
-            url: '/api/users/totalRate'
+            url: '/api/users/cartTotal'
+        }).then((res)=>{
+            console.log(res.data)
+            this.setState({
+                total: res.data
+            })
         })
     }
 
@@ -45,7 +51,7 @@ class Cart extends React.Component{
             
             return(
                 <div key={item.prod_id}>
-                <CartsCard ID={item.prod_id} cosQty={item.quantity} totGen={this.totGen} addToast={this.props.addToast} /> 
+                <CartsCard ID={item.prod_id} cosQty={item.quantity} addToast={this.props.addToast} getTotal={this.getTotal} /> 
             </div>
             )
         })
@@ -58,12 +64,12 @@ class Cart extends React.Component{
         })
     }
 
-    totGen = (rate,qty)=>{
-        console.log(rate,qty)
-        this.setState(prevState=>({
-            total: prevState.total + parseFloat(rate)*parseFloat(qty)
-        }))
-    }
+    // totGen = (rate,qty)=>{
+    //     console.log(rate,qty)
+    //     this.setState(prevState=>({
+    //         total: prevState.total + parseFloat(rate)*parseFloat(qty)
+    //     }))
+    // }
 
     render(){
         let { message,total,cart } = this.state
