@@ -9,14 +9,29 @@ module.exports = function (app, db) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.send('Not Logged In')
+    else res.send('Not Logged In')
   };
 
   function ensureAdmin(req, res, next){
     if (req.user.email === 'admin777@sweetShop.admn'){
+      req.type = 'ADMIN'
       return next()
     }
-    res.send('Not an admin')
+    else{
+      db.collection('supplier').findOne({email: req.user.email}, (err, doc)=>{
+        if (err) return res.send('Error')
+        else if (!doc){
+          console.log('NOT AN ADMIN')
+          return res.send('Not an admin')
+        }
+        else{
+          console.log('SUPPLIER')
+          req.type = 'SUPPLIER'
+          req.supplier = doc
+          return next()
+        }
+      })
+    }
   }
 
 app.get('/api/checkAuth', (req, res)=>{
@@ -114,15 +129,17 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
   
 
   app.get('/api/admin/checkIfAdmin', ensureAuthenticated, ensureAdmin, (req, res)=>{
-    res.send('ADMIN')
+    console.log('type: ', req.type)
+    if (req.type==='SUPPLIER') res.send('SUPPLIER')
+    else res.send('ADMIN')
   })
 
   app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/img/'
   }));
-
   app.post('/admin/api/addItems',ensureAuthenticated, ensureAdmin, (req, res) => {
+
     if (req.files === null) return res.send('no file')
     const img = req.files.image
     img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
@@ -132,7 +149,13 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     let sweet = req.body
     console.log(sweet)
 
-    db.collection('sweets').findOne({ name: sweet.name, supplier: sweet.supplier }, function (err, doc) {
+    let supplier
+    if (req.type ==='SUPPLIER'){
+      supplier = req.supplier.name
+    }
+    else supplier = sweet.supplier
+
+    db.collection('sweets').findOne({ name: sweet.name, supplier }, function (err, doc) {
         if(err) {
             next(err);
         } else if (doc) {
@@ -143,7 +166,7 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
         } else {
           sweet.quantity = parseFloat(sweet.quantity)
           db.collection('sweets').insertOne(
-            sweet,
+            { ...sweet, supplier },
             (err, doc) => {
                 if(err) {
                     res.send('error');
@@ -157,6 +180,7 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
   })
 
   app.post('/admin/api/updateItems',ensureAuthenticated, ensureAdmin, (req, res) => {
+
     if (req.files !== null) {
       const img = req.files.image
       img.mv(`${__dirname}/client/public/uploads/${req.body.name}.jpg`, (err)=>{
@@ -167,7 +191,13 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     let sweet = req.body
     console.log(sweet)
 
-    db.collection('sweets').findOne({ name: sweet.name, supplier: sweet.supplier }, function (err, doc) {
+    let supplier
+    if (req.type ==='SUPPLIER'){
+      supplier = req.supplier.name
+    }
+    else supplier = sweet.supplier
+
+    db.collection('sweets').findOne({ name: sweet.name, supplier }, function (err, doc) {
         if(err) {
             next(err);
         } else if (!doc) {
@@ -201,6 +231,46 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
       console.log(doc)
       if ( doc.deletedCount === 0 ) res.send('Please use correct product ID')
       else return res.send('Success')
+    })
+  })
+
+
+  app.get('/api/admin/suppliers',ensureAuthenticated, ensureAdmin, (req, res)=>{
+    db.collection('supplier').find({}).project({name: 1}).toArray().then((docs)=>{
+      res.json(docs)
+    }).catch((err)=> res.send(err))
+  })
+
+  app.post('/api/admin/addSupplier',ensureAuthenticated, ensureAdmin, (req, res)=>{
+    let sup = req.body
+    db.collection('supplier').findOne({email: sup.email},(err, doc)=>{
+      if (err) res.send(err)
+      else if (doc) res.send('Supplier already exists')
+      else {
+        db.collection('supplier').insertOne(sup, (err, doc)=>{
+          if (err) res.send(err)
+          else res.send('Success')
+        })
+      }
+    })
+  })
+
+
+  app.post('/api/supplier/address', ensureAuthenticated, ensureAdmin, (req, res)=>{
+    var address = req.body
+    db.collection('supplier').findOneAndUpdate({email: req.user.email}, {
+      $set: { address, name: address.name }
+    }, { new: true }, (err, doc)=>{
+      if (err) res.error(err)
+      else res.send('Success')
+    })
+  })
+
+  app.get('/api/supplier/address', ensureAuthenticated, ensureAdmin, (req, res)=>{
+    db.collection('supplier').findOne({email: req.user.email}, (err, doc)=>{
+      if (err) res.send('Error')
+      else if (!doc) res.send('no address')
+      else res.json(doc.address)
     })
   })
 

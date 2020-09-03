@@ -4,6 +4,9 @@ import Axios from 'axios'
 import AddItems from './addItem'
 import DeleteItems from './deleteItem'
 import ToastEn from './toastEnabler'
+import AddSupplier from './addSupplier'
+import AddressSup from './supplierData'
+import AddItemsX from './newAddItem'
 
 const Admin = ()=>{
 
@@ -15,7 +18,10 @@ const Admin = ()=>{
         }).then((res)=>{
             console.log(res.data)
             if (res.data === 'ADMIN'){
-                setAdminStat(true)
+                setAdminStat('ADMIN')
+            }
+            else if (res.data === 'SUPPLIER'){
+                setAdminStat('SUPPLIER')
             }
         })
     }, [])
@@ -33,7 +39,7 @@ const Admin = ()=>{
             </div>
         </div>
     )
-    else return(
+    else if(adminStat === 'ADMIN') return(
         <>
             
             <Router>
@@ -45,11 +51,33 @@ const Admin = ()=>{
                 <div className='d-flex justify-content-center align-items-center'>
                     <Link to='/admin/items'><button className='btn btn-success m-5 mr-auto'>Catalogue Editor</button></Link>
                     <Link to='/admin/deleteItem'><button className='btn btn-danger m-5'>Delete from Catalogue</button></Link>
+                    { adminStat==='ADMIN'&&<Link to='/admin/addSupplier' ><button className='btn btn-warning'>Add Supplier</button></Link> }
                 </div>
                 <Route path='/admin/items' component={ToastEn(AddItems)} />
                 <Route path='/admin/deleteItem' component={DeleteItems} />
+                {adminStat==='ADMIN'&& <Route path='/admin/addSupplier' component={AddSupplier} />}
             </Router>
         </>
+    )
+    else return(
+        <>
+            
+        <Router>
+            <div className='text-center'>
+                <h1>
+                    We offer the following services.
+                </h1>
+            </div>
+            <div className='d-flex justify-content-between align-items-center'>
+                <Link to='/admin/items'><button className='btn btn-success m-5 '>Catalogue Editor</button></Link>
+                <Link to='/admin/deleteItem'><button className='btn btn-danger m-5'>Delete from Catalogue</button></Link>
+                <Link to='/supplier/address'><button className='btn btn-warning m-5'>Update your Address</button></Link>
+            </div>
+            <Route path='/admin/items' component={ToastEn(AddItemsX)} />
+            <Route path='/admin/deleteItem' component={DeleteItems} />
+            {adminStat==='SUPPLIER'&&<Route path = '/supplier/address' component={AddressSup} />}
+        </Router>
+    </>
     )
 }
 

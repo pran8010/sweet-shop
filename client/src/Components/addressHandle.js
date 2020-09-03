@@ -62,7 +62,7 @@ class AddressHandle extends React.Component{
             this.setState(prevState=>({
                 addCheck: !prevState.addCheck
             }))
-            console.log(this.state.addCheck)
+            // console.log(this.state.addCheck)
         }
         else{
             this.setState({
@@ -110,7 +110,7 @@ class AddressHandle extends React.Component{
                         </div>
                         <div className="col-md-3">
                             <label htmlFor="phone" className="form-label">Mobile Number</label>
-                            <input type="number" className="form-control" id="phone" value={phone} onChange={this.handleChange} readOnly={addCheck} maxLength='12' minLength='10' required={!addCheck} />
+                            <input type="text" className="form-control" id="phone" value={phone} onChange={this.handleChange} readOnly={addCheck} maxLength='13' minLength='10' required={!addCheck} />
                         </div>
                         <div className="col-md-12">
                             <label htmlFor="plotNo" className="form-label">Plot No./ House No.</label>
@@ -146,7 +146,7 @@ class AddressHandle extends React.Component{
                         </div>
                         <div className="col-md-3">
                             <label htmlFor="pin" className="form-label">Pin</label>
-                            <input type="number" className="form-control" id="pin" value={pin} onChange={this.handleChange} readOnly={addCheck} maxLength='6' minLength='6' required={!addCheck} />
+                            <input type="text" className="form-control" id="pin" value={pin} onChange={this.handleChange} readOnly={addCheck} maxLength='6' minLength='5' required={!addCheck} />
                         </div>
                         <div className="col-12">
                             <div className="form-check">

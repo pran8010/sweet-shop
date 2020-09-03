@@ -4,7 +4,7 @@ import Progress from './ProgressBar'
 import Message from './customAlert'
 
 
-class AddItems extends React.Component{
+class AddItemsX extends React.Component{
     constructor(){
         super()
         this.state = {
@@ -16,7 +16,6 @@ class AddItems extends React.Component{
             branch: '',
             type: '',
             message: '',
-            suppliers: [],
             UpPercent: 0,
             updateOrNot: true
         }
@@ -24,27 +23,6 @@ class AddItems extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-
-    componentDidMount = ()=>{
-        Axios({
-            method: 'get',
-            url: '/api/admin/suppliers'
-        }).then((res)=>{
-            console.log(res.data)
-            this.setState({
-                suppliers: res.data
-            })
-        }).catch((err)=> this.props.addToast(err, { appearance: 'error', autoDismiss: true }))
-    }
-
-    // suppliersGen = ()=>{
-    //     var list = this.state.suppliers.map((item)=>{
-    //         return(
-    //             <option value = {item.name}>{item.name}</option>
-    //         )
-    //     })
-    //     return list
-    // }
 
     handleChange = (e)=>{
         if (e.target.name === 'image'){
@@ -165,20 +143,6 @@ class AddItems extends React.Component{
                     </div>
                 </div>
                 <div className="input-group mb-3">
-                    <label className ="input-group-text" htmlFor="Branch">Supplier</label>
-                    {/* <select className="form-select" name = 'branch' id="Branch" required onChange={this.handleChange} >
-                        <option disabled selected>Choose the supplier...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select> */}
-                    <input className='form-control' id='Branch' name='branch' required onChange={this.handleChange} list = 'suppliersList' />
-                    <datalist id='suppliersList'>
-                        {this.state.suppliers.map((item, key) => <option key={key} value={item.name} />
-                        )}
-                    </datalist>
-                </div>
-                <div className="input-group mb-3">
                     <label className ="input-group-text" htmlFor="type">Item Type</label>
                     <select className="form-select" name = 'type' id="type" required={updateOrNot} onChange={this.handleChange} >
                         <option disabled selected>Item Type</option>
@@ -198,4 +162,4 @@ class AddItems extends React.Component{
     }
 }
 
-export default AddItems;
+export default AddItemsX;
