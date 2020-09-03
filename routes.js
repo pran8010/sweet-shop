@@ -226,7 +226,10 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
 
   app.get('/api/admin/deleteProduct/:ID', ensureAuthenticated, ensureAdmin, (req, res)=>{
     var ID = new ObjectID(req.params.ID)
-    db.collection('sweets').deleteOne({_id: ID}, (err, doc)=>{
+    let query;
+    if (req.type==='SUPPLIER') query = { _id: ID, supplier: req.supplier.name }
+    else query = { _id: ID }
+    db.collection('sweets').deleteOne(query, (err, doc)=>{
       if (err) return res.send(err)
       console.log(doc)
       if ( doc.deletedCount === 0 ) res.send('Please use correct product ID')
