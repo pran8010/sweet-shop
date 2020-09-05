@@ -399,7 +399,6 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
                   if (err) return console.log(err)
                   else{
                     // console.log(order)
-                    console.log(docs.value)
                   }
                 })
               })

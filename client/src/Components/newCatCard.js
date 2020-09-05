@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Axios from 'axios'
 
-const Card = ({name, rate, prod_id, storeQty})=>{
+const Card = ({name, rate, prod_id, storeQty,supplier})=>{
 
     let [ qtyUnit, setQtyUnit ] = useState('kg')
     let [ cartingStat, setCartingStat ] = useState(false)
@@ -31,7 +31,8 @@ const Card = ({name, rate, prod_id, storeQty})=>{
                 url: '/api/user/addCart',
                 data: {
                     prod_id,
-                    quantity
+                    quantity,
+                    supplier
                 }
             }).then((res)=>{
                 console.log(res)
