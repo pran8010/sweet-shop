@@ -2,6 +2,12 @@ const passport    = require('passport');
 const bcrypt      = require('bcrypt');
 const fileUpload = require('express-fileupload');
 const ObjectID = require('mongodb').ObjectID
+const Razorpay = require('razorpay')
+
+var razorPay = new Razorpay({
+  key_id: process.env.RAZOR_KEY_ID,
+  key_secret: process.env.RAZOR_KEY_SECRET,
+});
 
 module.exports = function (app, db) {
       
@@ -356,6 +362,99 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
     res.send(total.toString())
     })
   })
+
+  app.post('/api/razorPay/verification', (req, res) => {
+    // do a validation
+  
+    console.log(req.body)
+  
+    const crypto = require('crypto')
+  
+    const shasum = crypto.createHmac('sha256', process.env.RAZOR_VERIFY_SECRET)
+    shasum.update(JSON.stringify(req.body))
+    const digest = shasum.digest('hex')
+  
+    console.log(digest, req.headers['x-razorpay-signature'])
+  
+    if (digest === req.headers['x-razorpay-signature']) {
+      console.log('request is legit',req.body)
+      // process it
+      if (req.body.event === 'order.paid'){
+        db.collection('users').findOneAndUpdate({ email: req.body.payload.payment.entity.email },{
+          $set: {
+            cart: []
+          },
+          $push: {
+            orders: {
+              _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: "$cart" , total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date()
+            }
+          }
+        },(err, docs)=>{
+          console.log(docs.value)
+            if (err) console.log(err)
+            else db.collection('orders').insertOne({ _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: docs.value.cart, total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date() }, (err, order)=>{
+              console.log(order)
+              if (err) return console.log(err)
+              else{
+                // console.log(order)
+              }
+            })
+          })
+      }
+    }
+    else {
+      // pass it
+    }
+    res.json({ status: 'ok' })
+  })
+
+  // const orderLoad = ()=>{
+  //   db.collection('orders').insertOne({ _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: user.cart, total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date() }, (err, doc)=>{
+  //     console.log(doc)
+  //     if (err) return console.log(err)
+  //     else{
+       
+  //     }
+  //   })
+  // }
+  // const razorPayOrder = ()=>{
+  //   var options = {
+  //     amount: total*100,  // amount in the smallest currency unit
+  //     currency: "INR",
+  //     receipt: doc.ops[0]._id.toString(),
+  //     payment_capture: '1'
+  //   };
+  //   razorPay.orders.create(options, function(err, order) {
+  //     if (err) return console.log(err)
+  //     res.json({...order,name: user.address.name, email: user.email, phone: user.address.phone})
+  //     console.log(order);
+  //   });
+  // }
+
+  app.get('/api/users/orders', ensureAuthenticated, (req, res)=>{
+    let user = req.user
+    db.collection('sweets').find({_id: {$in:user.cart.map((item)=>ObjectID(item.prod_id))}}).project({rate: 1}).toArray().then((sweets)=>{
+    let total = user.cart.reduce((total, item, key)=>{
+      console.log(total)
+      return total+item.quantity*parseFloat(sweets[key].rate)
+    },0)
+    console.log(total)
+    return total
+    }).then ((total)=>{
+      var options = {
+        amount: total*100,  // amount in the smallest currency unit
+        currency: "INR",
+        receipt: ObjectID().toString(),
+        payment_capture: '1'
+      };
+      razorPay.orders.create(options, function(err, order) {
+        if (err) return console.log(err)
+        res.json({...order,name: user.address.name, email: user.email, phone: user.address.phone})
+        console.log(order);
+      });
+    })
+  })
+
 
   app.get('/api/getSweet/:ID', (req, res)=>{
     var ID =  new ObjectID(req.params.ID)
