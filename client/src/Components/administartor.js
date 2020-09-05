@@ -7,6 +7,7 @@ import ToastEn from './toastEnabler'
 import AddSupplier from './addSupplier'
 import AddressSup from './supplierData'
 import AddItemsX from './newAddItem'
+import SupplierOrder from './supplierOrders'
 
 const Admin = ()=>{
 
@@ -72,9 +73,11 @@ const Admin = ()=>{
                 <Link to='/admin/items'><button className='btn btn-success m-5 '>Catalogue Editor</button></Link>
                 <Link to='/admin/deleteItem'><button className='btn btn-danger m-5'>Delete from Catalogue</button></Link>
                 <Link to='/supplier/address'><button className='btn btn-warning m-5'>Update your Address</button></Link>
+                <Link to='/admin/supplier/orders'><button className='btn btn-primary m-5'>View orders</button></Link>
             </div>
             <Route path='/admin/items' component={ToastEn(AddItemsX)} />
             <Route path='/admin/deleteItem' component={DeleteItems} />
+            <Route path='/admin/supplier/orders' component={SupplierOrder} />
             {adminStat==='SUPPLIER'&&<Route path = '/supplier/address' component={AddressSup} />}
         </Router>
     </>

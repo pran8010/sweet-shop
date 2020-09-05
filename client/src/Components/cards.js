@@ -68,7 +68,8 @@ class Cards extends React.Component {
                 url: '/api/user/addCart',
                 data: {
                     prod_id,
-                    quantity
+                    quantity,
+                    supplier: this.props.supplier
                 }
             }).then((res)=>{
                 console.log(res)

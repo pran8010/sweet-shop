@@ -46,7 +46,7 @@ const Catalogue = ()=>{
     const cardGen = (products)=>{
         var list = products.map((item)=>(
             <div  className='ml-2' key={item._id} id={item._id}>
-                <Card name = {item.name} prod_id = {item._id} rate = {item.rate} storeQty = {item.qty} /> 
+                <Card name = {item.name} prod_id = {item._id} rate = {item.rate} storeQty = {item.qty} supplier={item.supplier} /> 
             </div>
         ))
 
