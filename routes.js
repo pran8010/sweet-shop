@@ -265,6 +265,14 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
   })
 
 
+  app.get('/api/admin/SupplierOrders', ensureAuthenticated, ensureAdmin, (req, res)=>{
+    db.collection('orders').find({"products.supplier": req.supplier.name}).toArray().then((docs)=>{
+      console.log(docs)
+      res.json(docs)
+    })
+  })
+
+
   app.post('/api/supplier/address', ensureAuthenticated, ensureAdmin, (req, res)=>{
     var address = req.body
     db.collection('supplier').findOneAndUpdate({email: req.user.email}, {
