@@ -380,26 +380,31 @@ app.get('/api/test2',ensureAuthenticated,(req, res)=>{
       console.log('request is legit',req.body)
       // process it
       if (req.body.event === 'order.paid'){
-        db.collection('users').findOneAndUpdate({ email: req.body.payload.payment.entity.email },{
-          $set: {
-            cart: []
-          },
-          $push: {
-            orders: {
-              _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: "$cart" , total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date()
-            }
-          }
-        },(err, docs)=>{
-          console.log(docs.value)
-            if (err) console.log(err)
-            else db.collection('orders').insertOne({ _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: docs.value.cart, total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date() }, (err, order)=>{
-              console.log(order)
-              if (err) return console.log(err)
-              else{
-                // console.log(order)
+        db.collection('users').findOne({email: req.body.payload.payment.entity.email},(err, user)=>{
+          if (err) console.log(err)
+          else {
+            db.collection('users').findOneAndUpdate({ email: req.body.payload.payment.entity.email },{
+              $set: {
+                cart: []
+              },
+              $push: {
+                orders: {
+                  _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: user.cart , total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date()
+                }
               }
-            })
-          })
+            },(err, docs)=>{
+                if (err) console.log(err)
+                else db.collection('orders').insertOne({ _id: ObjectID(req.body.payload.order.entity.receipt), email: req.body.payload.payment.entity.email, products: docs.value.cart, total: req.body.payload.payment.entity.amount, status: 'ordered --paid', orderedOn: Date() }, (err, order)=>{
+                  console.log(order)
+                  if (err) return console.log(err)
+                  else{
+                    // console.log(order)
+                    console.log(docs.value)
+                  }
+                })
+              })
+          }
+        })
       }
     }
     else {
